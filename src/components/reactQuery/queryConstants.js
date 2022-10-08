@@ -1,4 +1,5 @@
 export const queryKeys = {
-    user: "user"
+    pokemons: "pokemons",
+    pokemonData: "pokemonData"
   };
   

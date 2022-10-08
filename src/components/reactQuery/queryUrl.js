@@ -1,1 +1,1 @@
-export const serverUrl = "https://backend.yagovelazquez.com";
+export const serverUrl = "https://pokeapi.co/api/v2";
