@@ -1,10 +1,12 @@
-
-import './App.css';
-import PokemonHome from './components/pages/PokemonHome';
+import "./App.css";
+import PokemonHome from "./components/pages/PokemonHome";
+import PokemonTypesProvider from "./components/store/pokemonTypes-context";
 
 function App() {
   return (
-   <PokemonHome />
+    <PokemonTypesProvider>
+      <PokemonHome />
+    </PokemonTypesProvider>
   );
 }
 

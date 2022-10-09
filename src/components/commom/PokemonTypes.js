@@ -12,7 +12,7 @@ function PokemonTypes({types}) {
     <ul className="list-none">
       {processedTypes.map(({ typeName, TypeIcon }) => (
         <li  key={typeName}>
-       <TypeIcon className="inline mx-2 align-middle"/><span className="capitalize align-middle">{typeName} </span>
+       <TypeIcon className="inline mx-2 align-middle"/><span value="typeName" className="capitalize align-middle">{typeName} </span>
         </li>
       ))}
     </ul>
