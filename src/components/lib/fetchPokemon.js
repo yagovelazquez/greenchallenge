@@ -104,12 +104,11 @@ export const fetchSearchPokemon = async (
   try {
     if (searchCategory === "name") {
       const data = await searchPokemons(searchCategory, lowerCaseSearchValue);
-      return { ...data, count: 1 };
+      return { pokemons: [data], count: 1 };
     }
 
     if (searchCategory === "type") {
-      console.log(searchValue)
-      console.log(pokemonTypesCtx)
+
       let data;
       if (!pokemonTypesCtx.checkStoragedTypeExists(lowerCaseSearchValue)) {
         const serverData = await searchPokemons(

@@ -39,7 +39,7 @@ function PokemonHome() {
     [queryKeys.pokemons, pageIndex, pageSize],
     () => fetchPokemons(pageSize, pageIndex * pageSize),
     {
-      enabled: isPokemonQueryEnabled(debouncedInputValue),
+      enabled: isPokemonQueryEnabled(debouncedInputValue, searchOption),
     }
   );
 
@@ -86,10 +86,10 @@ function PokemonHome() {
           debouncedInputValue
         ),
         onSuccess: (data) => {
-          console.log(data);
+
         },
         onError: (error, query) => {
-          console.log(query);
+          
         },
       }
     );
@@ -126,6 +126,12 @@ function PokemonHome() {
 
   const columns = [
     {
+      accessorKey: "image",
+      header: "",
+      cell: (info) => info.getValue(),
+      filter: multiSelectFilter,
+    },
+    {
       accessorKey: "name",
       header: "Name",
       cell: (info) => info.getValue(),
@@ -159,6 +165,8 @@ function PokemonHome() {
     { label: "Name", value: "name" },
   ];
 
+
+
   return (
     <div>
       <Select
@@ -176,7 +184,7 @@ function PokemonHome() {
         "Loading..."
       ) : (
         <TableComponent
-          data={enabled?.data?.pokemons}
+          data={enabled?.data?.pokemons || []}
           pageCount={pageCount}
           columns={columns}
           onSetPagination={setPagination}
