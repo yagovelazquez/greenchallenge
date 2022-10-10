@@ -173,6 +173,7 @@ function PokemonHome() {
         options={searchOptions}
         onChange={searchOptionsHandler}
         selectValue={searchOption}
+        firstOption="Select a category"
       />
       <DebouncedInput
         value={""}

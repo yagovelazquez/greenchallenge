@@ -1,4 +1,4 @@
-function Select({ options, selectClasses, onChange, selectValue }) {
+function Select({ options, selectClasses, onChange, selectValue, firstOption }) {
   return (
     <div className="flex justify-center">
       <div className="mb-3 xl:w-96">
@@ -22,7 +22,7 @@ function Select({ options, selectClasses, onChange, selectValue }) {
       focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none ${selectClasses}`}
           aria-label="Default select example"
         >
-          <option>Choose a category</option>
+         {firstOption && <option>{firstOption}</option>}
           {options.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}

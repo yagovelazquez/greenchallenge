@@ -104,7 +104,8 @@ export const fetchSearchPokemon = async (
   try {
     if (searchCategory === "name") {
       const data = await searchPokemons(searchCategory, lowerCaseSearchValue);
-      return { pokemons: [data], count: 1 };
+      const processedPokemonData = processPokemonData(data);
+      return { pokemons: [processedPokemonData], count: 1 };
     }
 
     if (searchCategory === "type") {

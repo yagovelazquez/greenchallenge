@@ -16,6 +16,7 @@ import {
   rankItem,
   compareItems,
 } from "@tanstack/match-sorter-utils";
+import DropdownColumnFilter from "./DropdownColumnFilter";
 
 const fuzzyFilter = (row, columnId, value, addMeta) => {
   const itemRank = rankItem(row.getValue(columnId), value);
@@ -50,6 +51,7 @@ function Table({
   debouncedInputValue,
 }) {
   const [globalFilter, setGlobalFilter] = React.useState("");
+  const [columnFilters, setColumnFilters] = React.useState([]);
 
   const table = useReactTable({
     data,
@@ -58,6 +60,7 @@ function Table({
       globalFilter,
       columnVisibility: { types: false },
       pagination,
+      columnFilters,
     },
     pageCount: pageCount,
     globalFilterFn: fuzzyFilter,
@@ -67,6 +70,7 @@ function Table({
     onPaginationChange: onSetPagination,
     manualPagination: true,
     onGlobalFilterChange: setGlobalFilter,
+    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
   });
@@ -74,8 +78,33 @@ function Table({
   const strippedFuncClass = (index) =>
     index % 2 !== 0 ? "bg-gray-100 border-b" : "bg-white border-b";
 
+  const dropDownValues = [
+    {value: "all", label: "All"},
+    {value: "normal", label: "Normal"},
+    {value: "fire", label: "Fire"},
+    {value:"water", label: "Water"},
+    {value:"grass", label: "Grass"},
+    {value:"electric", label: "Electric"},
+   {value: "ice" , label: "Ice"},
+    {value:"fighting", label: "Fighting"},
+    {value:"poison", label: "Poison"},
+    {value:"ground", label: "Ground"},
+   { value:"flying", label: "Flying"},
+    {value:"psychic", label: "Psychic"},
+   { value:"bug",label: "Bug" },
+    {value:"rock",label: "Rock" },
+    {value:"ghost", label: "Ghost"},
+    {value:"dark",label: "Dark"},
+    {value:"dragon",label: "Dragon"},
+    {value:"steel",label: "steel"},
+    {value:"fairy",label: "Fairy" },
+  ];
+
   return (
     <div className="p-2">
+      <div>
+      <DropdownColumnFilter dropDownValues={dropDownValues} column={table.getColumn("types")} table={table} />
+      </div>
       <table className="min-w-[450px] border-2 bg-gray-200 border-b-0">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -131,7 +160,6 @@ function Table({
       </table>
 
       {table.getPageCount() > 1 && (
-      
         <>
           <div className="h-4" />
           <span className="flex items-center gap-1">

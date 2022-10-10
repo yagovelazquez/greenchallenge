@@ -45,6 +45,12 @@ function PokemonTypesProvider(props) {
     defaultPokemonTypeState
   );
 
+  const [filterType, setFilterType] = useState(
+    ""
+  );
+
+  
+
   const addPokemonsFromTypeHandler = (pokemonsFromType) => {
     setPokemonTypeState((prevState) => {
       return {
@@ -75,6 +81,8 @@ function PokemonTypesProvider(props) {
     addPokemonsFromType: addPokemonsFromTypeHandler,
     checkStoragedTypeExists,
     getPokemonsNotFetched,
+    filterType,
+    setFilterType
   };
 
   return (

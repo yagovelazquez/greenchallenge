@@ -42,6 +42,8 @@ const PokemonTypesContext = React.createContext({
   addPokemonsFromType: () => {},
   checkStoragedTypeExists: () => {},
   getPokemonsNotFetched:  () => {},
+  filterType: "",
+  setFilterType: () => {}
 });
 
 export default PokemonTypesContext;
