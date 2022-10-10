@@ -1,32 +1,18 @@
 import * as React from "react";
-import DebouncedInput from "./DebouncedInput";
 
 import {
-  getPaginationRowModel,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   useReactTable,
-  FilterFn,
   sortingFns,
 } from "@tanstack/react-table";
 
 import {
-  RankingInfo,
-  rankItem,
   compareItems,
 } from "@tanstack/match-sorter-utils";
 import DropdownColumnFilter from "./DropdownColumnFilter";
 
-const fuzzyFilter = (row, columnId, value, addMeta) => {
-  const itemRank = rankItem(row.getValue(columnId), value);
-
-  addMeta({
-    itemRank,
-  });
-
-  return itemRank.passed;
-};
 
 const fuzzySort = (rowA, rowB, columnId) => {
   let dir = 0;
@@ -47,8 +33,6 @@ function Table({
   onSetPagination,
   pagination,
   pageCount,
-  onDebouncedInputValue,
-  debouncedInputValue,
 }) {
   const [globalFilter, setGlobalFilter] = React.useState("");
   const [columnFilters, setColumnFilters] = React.useState([]);
@@ -63,10 +47,6 @@ function Table({
       columnFilters,
     },
     pageCount: pageCount,
-    globalFilterFn: fuzzyFilter,
-    filterFns: {
-      fuzzy: fuzzyFilter,
-    },
     onPaginationChange: onSetPagination,
     manualPagination: true,
     onGlobalFilterChange: setGlobalFilter,
@@ -75,11 +55,14 @@ function Table({
     getFilteredRowModel: getFilteredRowModel(),
   });
 
+   console.log(table.getState())
+   console.log(table.getPrePaginationRowModel().rows.length)
+
   const strippedFuncClass = (index) =>
     index % 2 !== 0 ? "bg-gray-100 border-b" : "bg-white border-b";
 
   const dropDownValues = [
-    {value: "all", label: "All"},
+    {value: "", label: "All"},
     {value: "normal", label: "Normal"},
     {value: "fire", label: "Fire"},
     {value:"water", label: "Water"},
@@ -159,7 +142,10 @@ function Table({
         </tfoot>
       </table>
 
-      {table.getPageCount() > 1 && (
+      {(table.getPrePaginationRowModel().rows.length === 0 && columnFilters.length === 0) && <p>No pokemon matched your search!</p>}
+      {(table.getPrePaginationRowModel().rows.length === 0 && columnFilters.length > 0) && <p>No pokemon matched your filter in this page!</p>}
+
+      {(table.getPageCount() > 1 && columnFilters.length === 0) && (
         <>
           <div className="h-4" />
           <span className="flex items-center gap-1">

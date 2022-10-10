@@ -18,66 +18,66 @@ import { IoWaterSharp } from "react-icons/io5";
 import { BsSnow } from "react-icons/bs";
 
 export const setTypeIcon = (type) => {
-  let Icon
+  let Icon;
   switch (type) {
     case "normal":
-        Icon = BiCircle
+      Icon = BiCircle;
       break;
     case "fighting":
-        Icon = FaFistRaised
+      Icon = FaFistRaised;
       break;
     case "flying":
-        Icon = GiLibertyWing
+      Icon = GiLibertyWing;
       break;
     case "poison":
-        Icon = GiPoisonBottle
+      Icon = GiPoisonBottle;
       break;
     case "ground":
-       Icon = RiBuilding3Fill 
+      Icon = RiBuilding3Fill;
       break;
     case "rock":
-        Icon = GiStonePile
+      Icon = GiStonePile;
       break;
     case "bug":
-        Icon = AiFillBug
+      Icon = AiFillBug;
       break;
     case "ghost":
-        Icon = BiGhost
+      Icon = BiGhost;
       break;
     case "steel":
-        Icon = CgShapeHexagon
+      Icon = CgShapeHexagon;
       break;
     case "fire":
-        Icon = ImFire
+      Icon = ImFire;
       break;
     case "water":
-        Icon = IoWaterSharp
+      Icon = IoWaterSharp;
       break;
     case "grass":
-        Icon = GiThreeLeaves
+      Icon = GiThreeLeaves;
       break;
-    case "eletric":
-        Icon = AiFillThunderbolt
+    case "electric":
+      Icon = AiFillThunderbolt;
       break;
     case "psychic":
-        Icon = GiFluffySwirl
+      Icon = GiFluffySwirl;
       break;
     case "ice":
-        Icon = BsSnow
+      Icon = BsSnow;
       break;
     case "dragon":
-        Icon = GiSpikedDragonHead
+      Icon = GiSpikedDragonHead;
       break;
     case "dark":
-        Icon = GiNightSky
+      Icon = GiNightSky;
       break;
     case "fairy":
-        Icon = GiFairyWand
+      Icon = GiFairyWand;
       break;
     default:
-        Icon = GiFairyWand
+      Icon = GiFairyWand;
       break;
   }
 
-  return Icon
+  return Icon;
 };

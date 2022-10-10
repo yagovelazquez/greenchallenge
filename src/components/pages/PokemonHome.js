@@ -116,44 +116,31 @@ function PokemonHome() {
     [pageIndex, pageSize]
   );
 
-  function multiSelectFilter(rows, columnId, filterValue) {
-    return filterValue.length === 0
-      ? rows
-      : rows.filter((row) =>
-          filterValue.includes(String(row.original[columnId]))
-        );
-  }
-
   const columns = [
     {
       accessorKey: "image",
       header: "",
       cell: (info) => info.getValue(),
-      filter: multiSelectFilter,
     },
     {
       accessorKey: "name",
       header: "Name",
       cell: (info) => info.getValue(),
-      filter: multiSelectFilter,
     },
     {
       accessorKey: "height",
       header: "Height",
       cell: (info) => info.getValue(),
-      filter: multiSelectFilter,
     },
     {
       accessorKey: "typeComponent",
       header: "Type",
       cell: (info) => info.getValue(),
-      filter: multiSelectFilter,
     },
     {
       accessorKey: "types",
       header: "Types",
       cell: (info) => info.getValue(),
-      filter: multiSelectFilter,
     },
   ];
 
