@@ -1,7 +1,10 @@
 import React from "react";
 
-const PokemonTypesContext = React.createContext({
+const PokemonsContext = React.createContext({
   pokemons: {
+    
+  },
+  pokemonTypeState: {
     flying: [],
     flyingPokemonDetails: {},
     normal: [],
@@ -46,4 +49,4 @@ const PokemonTypesContext = React.createContext({
   setFilterType: () => {}
 });
 
-export default PokemonTypesContext;
+export default PokemonsContext;

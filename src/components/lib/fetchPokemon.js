@@ -1,5 +1,5 @@
 import { serverUrl } from "../reactQuery/queryUrl";
-import PokemonTypes from "./../commom/PokemonTypes";
+import List from "../commom/List";
 import { processPokemonData } from "./pokemonFn";
 
 export const getPokemons = async (limit, offset) => {
@@ -97,7 +97,7 @@ export const fetchSearchPokemon = async (
   searchValue,
   offset,
   limit,
-  pokemonTypesCtx
+  pokemonsCtx
 ) => {
   const lowerCaseSearchValue = searchValue.toLowerCase();
 
@@ -108,24 +108,31 @@ export const fetchSearchPokemon = async (
       return { pokemons: [processedPokemonData], count: 1 };
     }
 
+    if (searchCategory === "abilities") {
+
+    }
+
     if (searchCategory === "type") {
 
       let data;
-      if (!pokemonTypesCtx.checkStoragedTypeExists(lowerCaseSearchValue)) {
+      if (!pokemonsCtx.checkStoragedTypeExists(lowerCaseSearchValue, "pokemonTypeState")) {
+        console.log("nao existe tipo")
         const serverData = await searchPokemons(
           searchCategory,
           lowerCaseSearchValue
         );
-        pokemonTypesCtx.addPokemonsFromType(serverData);
+        pokemonsCtx.addPokemonsFromType(serverData);
         data = serverData.pokemon;
       }
-      if (pokemonTypesCtx.checkStoragedTypeExists(lowerCaseSearchValue)) {
-        data = pokemonTypesCtx.pokemons[lowerCaseSearchValue];
+      
+      if (pokemonsCtx.checkStoragedTypeExists(lowerCaseSearchValue, "pokemonTypeState")) {
+        console.log("existe tipo")
+        data = pokemonsCtx.pokemons[lowerCaseSearchValue];
       }
 
       const paginatedPokemonData = data.slice(offset, offset + limit);
 
-      const pokemonsNotFetched = pokemonTypesCtx.getPokemonsNotFetched(
+      const pokemonsNotFetched = pokemonsCtx.getPokemonsNotFetched(
         paginatedPokemonData,
         lowerCaseSearchValue
       );

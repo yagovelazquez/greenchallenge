@@ -1,7 +1,7 @@
 import React from "react";
 import Select from "./Select";
 
-function DropdownColumnFilter({ column, table, dropDownValues }) {
+function DropdownColumnFilter({ column, dropDownValues, variant }) {
   const columnFilterValue = column.getFilterValue();
 
   const setColumnFilterValueHandler = (e) => {
@@ -11,6 +11,7 @@ function DropdownColumnFilter({ column, table, dropDownValues }) {
   return (
     <>
       <Select
+        variant={variant}
         options={dropDownValues}
         onChange={setColumnFilterValueHandler}
         selectValue={columnFilterValue}

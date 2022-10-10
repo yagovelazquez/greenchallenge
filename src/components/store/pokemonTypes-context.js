@@ -1,4 +1,4 @@
-import PokemonTypesContext from "./pokemonTypesProvider";
+import PokemonsContext from "./pokemonsProvider";
 import { useReducer, useState } from "react";
 
 const defaultPokemonTypeState = {
@@ -40,16 +40,11 @@ const defaultPokemonTypeState = {
   fairyPokemonDetails: {},
 };
 
-function PokemonTypesProvider(props) {
+function PokemonsProvider(props) {
   const [pokemonTypeState, setPokemonTypeState] = useState(
     defaultPokemonTypeState
   );
 
-  const [filterType, setFilterType] = useState(
-    ""
-  );
-
-  
 
   const addPokemonsFromTypeHandler = (pokemonsFromType) => {
     setPokemonTypeState((prevState) => {
@@ -60,8 +55,8 @@ function PokemonTypesProvider(props) {
     });
   };
 
-  const checkStoragedTypeExists = (type) => {
-    return pokemonTypeState[type]?.length > 0;
+  const checkStoragedTypeExists = (type,state) => {
+    return state[type]?.length > 0;
   };
 
   const checkOnePokemonExists = (type, pokemon) => {
@@ -74,22 +69,20 @@ function PokemonTypesProvider(props) {
   pokemons.forEach(({pokemon}) => checkOnePokemonExists(type, pokemon.name) ? null : pokemonsNotFetched.push(pokemon))
   return pokemonsNotFetched
   };
-  
 
-  const pokemonTypesContext = {
-    pokemons: pokemonTypeState,
+
+  const pokemonsContext = {
+    pokemonTypeState,
     addPokemonsFromType: addPokemonsFromTypeHandler,
     checkStoragedTypeExists,
     getPokemonsNotFetched,
-    filterType,
-    setFilterType
   };
 
   return (
-    <PokemonTypesContext.Provider value={pokemonTypesContext}>
+    <PokemonsContext.Provider value={pokemonsContext}>
       {props.children}
-    </PokemonTypesContext.Provider>
+    </PokemonsContext.Provider>
   );
 }
 
-export default PokemonTypesProvider;
+export default PokemonsProvider;

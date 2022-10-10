@@ -1,14 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { serverUrl } from "../reactQuery/queryUrl";
-import React, { useEffect } from "react";
+import React from "react";
 import { queryKeys } from "../reactQuery/queryConstants";
-import {
-  getPokemons,
-  getPokemonInfo,
-  fetchPokemons,
-} from "../lib/fetchPokemon";
-import PokemonTypes from "../commom/PokemonTypes";
+import { fetchPokemons } from "../lib/fetchPokemon";
 import TableComponent from "./../commom/Table";
 import Select from "../commom/Select";
 import {
@@ -18,12 +12,12 @@ import {
 } from "../lib/pokemonFn";
 import { fetchSearchPokemon } from "./../lib/fetchPokemon";
 import { useContext } from "react";
-import PokemonTypesContext from "../store/pokemonTypesProvider";
+import PokemonsContext from "../store/pokemonsProvider";
 import useDataEnabled from "./../hooks/useDataEnabled";
 import DebouncedInput from "../commom/DebouncedInput";
 
 function PokemonHome() {
-  const pokemonTypesCtx = useContext(PokemonTypesContext);
+  const pokemonsCtx = useContext(PokemonsContext);
   const [{ pageIndex, pageSize }, setPagination] = React.useState({
     pageIndex: 0,
     pageSize: 10,
@@ -58,7 +52,7 @@ function PokemonHome() {
           debouncedInputValue,
           pageIndex * pageSize,
           pageSize,
-          pokemonTypesCtx
+          pokemonsCtx
         ),
       {
         enabled: isPokemonSearchEnabled(
@@ -85,12 +79,8 @@ function PokemonHome() {
           "name",
           debouncedInputValue
         ),
-        onSuccess: (data) => {
-
-        },
-        onError: (error, query) => {
-          
-        },
+        onSuccess: (data) => {},
+        onError: (error, query) => {},
       }
     );
 
@@ -121,6 +111,7 @@ function PokemonHome() {
       accessorKey: "image",
       header: "",
       cell: (info) => info.getValue(),
+      enableSorting: false,
     },
     {
       accessorKey: "name",
@@ -128,19 +119,69 @@ function PokemonHome() {
       cell: (info) => info.getValue(),
     },
     {
-      accessorKey: "height",
-      header: "Height",
+      accessorKey: "abilitiesComponent",
+      header: "Abilities",
       cell: (info) => info.getValue(),
+      enableSorting: false,
     },
     {
       accessorKey: "typeComponent",
       header: "Type",
       cell: (info) => info.getValue(),
+      enableSorting: false,
     },
     {
       accessorKey: "types",
       header: "Types",
       cell: (info) => info.getValue(),
+      enableSorting: false,
+    },
+    {
+      accessorKey: "height",
+      header: "Height",
+      cell: (info) => info.getValue(),
+      enableSorting: false,
+    },
+    {
+      header: "Stats",
+      columns: [
+        {
+          accessorKey: "hp",
+          header: "Hp",
+          cell: (info) => info.getValue(),
+          enableSorting: false,
+        },
+        {
+          accessorKey: "attack",
+          header: "Atk",
+          cell: (info) => info.getValue(),
+          enableSorting: false,
+        },
+        {
+          accessorKey: "defense",
+          header: "Def",
+          cell: (info) => info.getValue(),
+          enableSorting: false,
+        },
+        {
+          accessorKey: "special-attack",
+          header: "S.Atk",
+          cell: (info) => info.getValue(),
+          enableSorting: false,
+        },
+        {
+          accessorKey: "special-defense",
+          header: "S.Def",
+          cell: (info) => info.getValue(),
+          enableSorting: false,
+        },
+        {
+          accessorKey: "speed",
+          header: "Spd",
+          cell: (info) => info.getValue(),
+          enableSorting: false,
+        },
+      ],
     },
   ];
 
@@ -151,8 +192,6 @@ function PokemonHome() {
     { label: "Attributes", value: "attributes" },
     { label: "Name", value: "name" },
   ];
-
-
 
   return (
     <div>
