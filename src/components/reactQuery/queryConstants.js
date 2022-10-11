@@ -3,6 +3,7 @@ export const queryKeys = {
     pokemonData: "pokemonData",
     pokemonCategory: "pokemonCategory",
     name: "name",
-    type: "type"
+    type: "type",
+    ability: "ability"
   };
   

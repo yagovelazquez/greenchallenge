@@ -1,6 +1,7 @@
 import List from "../commom/List";
 import { queryKeys } from "../reactQuery/queryConstants";
 import Image from "./../commom/Image";
+import { serverUrl } from "../reactQuery/queryUrl";
 
 export const isPokemonQueryEnabled = (debouncedInputValue, searchCategory) =>
   debouncedInputValue && searchCategory ? false : true;
@@ -20,6 +21,16 @@ export const querySearchPokemonKeys = (
   let keys;
   if (searchCategory === "name") {
     keys = [queryKeys.pokemons, queryKeys.name, debouncedInputValue];
+  }
+
+  if (searchCategory === "ability") {
+    keys = [
+      queryKeys.pokemons,
+      queryKeys.ability,
+      debouncedInputValue,
+      offset,
+      limit,
+    ];
   }
 
   if (searchCategory === "type") {
@@ -87,4 +98,48 @@ export const processPokemonData = ({
     ...processedStats,
   };
   return processedPokemonData;
+};
+
+export const getFetchSearchPokemonFns = (searchCategory, pokemonsCtx) => {
+  switch (searchCategory) {
+    case "ability":
+      return {
+        pokemonsCtxCategoryState: pokemonsCtx.pokemonAbilityState,
+        pokemonCtxAddFromCategory: pokemonsCtx.addPokemonsFromAbility,
+      };
+    case "name":
+      return {
+        pokemonsCtxCategoryState: null,
+        pokemonCtxAddFromCategory: null,
+      };
+    case "type":
+      return {
+        pokemonsCtxCategoryState: pokemonsCtx.pokemonTypeState,
+        pokemonCtxAddFromCategory: pokemonsCtx.addPokemonsFromType,
+      };
+    default:
+      return {
+        pokemonsCtxCategoryState: null,
+        pokemonCtxAddFromCategory: null,
+      };
+  }
+};
+
+export const getCategoryUrl = (searchCategory, searchValue) => {
+  let url = `${serverUrl}/`;
+
+  switch (searchCategory) {
+    case "ability":
+      url += `ability/${searchValue}/`;
+      return url;
+    case "name":
+      url += `pokemon/${searchValue}`;
+      return url;
+    case "type":
+      url += `type/${searchValue}/`;
+      return url;
+
+    default:
+      return null;
+  }
 };

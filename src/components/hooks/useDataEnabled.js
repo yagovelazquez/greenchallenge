@@ -9,6 +9,7 @@ function useDataEnabled(
   loading
 ) {
 
+
   if (isPokemonQueryEnabled(debouncedInputValue, actualCategoryValue)) {
     return { data: data.normalData, isLoading: loading.isLoadingDataPokemon };
   }
@@ -26,6 +27,15 @@ function useDataEnabled(
     return {
       data: data.dataType,
       isLoading: loading.isLoadingPokemonTypeSearch,
+    };
+  }
+
+  if (
+    isPokemonSearchEnabled(actualCategoryValue, "ability", debouncedInputValue)
+  ) {
+    return {
+      data: data.dataAbility,
+      isLoading: loading.isLoadingPokemonAbilitySearch,
     };
   }
 }

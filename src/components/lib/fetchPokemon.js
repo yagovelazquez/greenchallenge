@@ -1,6 +1,10 @@
 import { serverUrl } from "../reactQuery/queryUrl";
 import List from "../commom/List";
-import { processPokemonData } from "./pokemonFn";
+import {
+  processPokemonData,
+  getFetchSearchPokemonFns,
+  getCategoryUrl,
+} from "./pokemonFn";
 
 export const getPokemons = async (limit, offset) => {
   const url = `${serverUrl}/pokemon?limit=${limit}&offset=${offset}`;
@@ -44,39 +48,36 @@ export const fetchPokemonDetails = (data) => {
   });
 };
 
-export const fetchPokemons = async (limit, offset) => {
+export const fetchPokemons = async (limit, offset, pokemonsCtx) => {
   try {
-    const data = await getPokemons(limit, offset);
-    const promises = data.results.map(async (pokemon) => {
-      const pokemonInfo = await getPokemonInfo(pokemon.url);
-      const processedPokemonData = processPokemonData(pokemonInfo);
-      return processedPokemonData;
-    });
+      const data = await getPokemons(limit, offset);
 
-    const results = await Promise.all(promises);
+      const { pokemonsNotFetched, pokemonsFetched } =
+      pokemonsCtx.getPokemonsNotFetched(
+       data.results
+      );
 
-    return { pokemons: results, count: data.count };
+      if (pokemonsNotFetched.length === 0)
+      return { pokemons: pokemonsFetched, count: data.count };
+
+      const promises = fetchPokemonDetails(pokemonsNotFetched);
+      const results = await Promise.all(promises);
+      pokemonsCtx.addPokemons(results);
+
+      if (pokemonsFetched.length === 0)
+      return { pokemons: results, count: data.count };
+
+
+      pokemonsFetched.push(...results);
+      return { pokemons: pokemonsFetched, count: data.count };
+  
   } catch (error) {
     throw new Error(error.message || "Something went wrong");
   }
 };
 
-export const searchPokemons = async (
-  searchCategory,
-  searchValue,
-  limit,
-  offset
-) => {
-  let url = `${serverUrl}/`;
-
-  if (searchCategory === "name") {
-    url += `pokemon/${searchValue}`;
-  }
-
-  if (searchCategory === "type") {
-    url += `type/${searchValue}/`;
-  }
-
+export const searchPokemons = async (searchCategory, searchValue) => {
+  const url = getCategoryUrl(searchCategory, searchValue);
   const response = await fetch(url, {
     method: "GET",
   });
@@ -95,53 +96,74 @@ export const searchPokemons = async (
 export const fetchSearchPokemon = async (
   searchCategory,
   searchValue,
+  pokemonsCtx,
   offset,
-  limit,
-  pokemonsCtx
+  limit
 ) => {
   const lowerCaseSearchValue = searchValue.toLowerCase();
 
   try {
     if (searchCategory === "name") {
+      if (pokemonsCtx.checkOnePokemonExists(lowerCaseSearchValue))
+        return {
+          pokemons: [pokemonsCtx.pokemonState[lowerCaseSearchValue]],
+          count: 1,
+        };
+
       const data = await searchPokemons(searchCategory, lowerCaseSearchValue);
       const processedPokemonData = processPokemonData(data);
+      pokemonsCtx.addPokemons([processedPokemonData]);
+
       return { pokemons: [processedPokemonData], count: 1 };
     }
 
-    if (searchCategory === "abilities") {
+    const { pokemonsCtxCategoryState, pokemonCtxAddFromCategory } =
+      getFetchSearchPokemonFns(searchCategory, pokemonsCtx);
+    let data;
 
-    }
-
-    if (searchCategory === "type") {
-
-      let data;
-      if (!pokemonsCtx.checkStoragedTypeExists(lowerCaseSearchValue, "pokemonTypeState")) {
-        console.log("nao existe tipo")
-        const serverData = await searchPokemons(
-          searchCategory,
-          lowerCaseSearchValue
-        );
-        pokemonsCtx.addPokemonsFromType(serverData);
-        data = serverData.pokemon;
-      }
-      
-      if (pokemonsCtx.checkStoragedTypeExists(lowerCaseSearchValue, "pokemonTypeState")) {
-        console.log("existe tipo")
-        data = pokemonsCtx.pokemons[lowerCaseSearchValue];
-      }
-
-      const paginatedPokemonData = data.slice(offset, offset + limit);
-
-      const pokemonsNotFetched = pokemonsCtx.getPokemonsNotFetched(
-        paginatedPokemonData,
+    if (
+      !pokemonsCtx.checkStoragedDataExists(
+        lowerCaseSearchValue,
+        pokemonsCtxCategoryState
+      )
+    ) {
+      const serverData = await searchPokemons(
+        searchCategory,
         lowerCaseSearchValue
       );
-      const promises = fetchPokemonDetails(pokemonsNotFetched);
-      const results = await Promise.all(promises);
 
+      pokemonCtxAddFromCategory(serverData);
+      data = serverData.pokemon;
+    }
+
+    if (
+      pokemonsCtx.checkStoragedDataExists(
+        lowerCaseSearchValue,
+        pokemonsCtxCategoryState
+      )
+    ) {
+      data = pokemonsCtxCategoryState[lowerCaseSearchValue];
+    }
+
+    const paginatedPokemonData = data.slice(offset, offset + limit);
+
+    const { pokemonsNotFetched, pokemonsFetched } =
+      pokemonsCtx.getPokemonsNotFetched(
+        paginatedPokemonData, true
+      );
+
+    if (pokemonsNotFetched.length === 0)
+      return { pokemons: pokemonsFetched, count: data.length };
+
+    const promises = fetchPokemonDetails(pokemonsNotFetched);
+    const results = await Promise.all(promises);
+    pokemonsCtx.addPokemons(results);
+
+    if (pokemonsFetched.length === 0)
       return { pokemons: results, count: data.length };
 
-    }
+    pokemonsFetched.push(...results);
+    return { pokemons: pokemonsFetched, count: data.length };
   } catch (error) {
     console.log(error, "aiii");
     throw new Error(error.message || "Something went wrong");

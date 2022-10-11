@@ -31,7 +31,7 @@ function PokemonHome() {
 
   const { data: dataPokemon, isLoading: isLoadingDataPokemon } = useQuery(
     [queryKeys.pokemons, pageIndex, pageSize],
-    () => fetchPokemons(pageSize, pageIndex * pageSize),
+    () => fetchPokemons(pageSize, pageIndex * pageSize, pokemonsCtx),
     {
       enabled: isPokemonQueryEnabled(debouncedInputValue, searchOption),
     }
@@ -50,9 +50,9 @@ function PokemonHome() {
         fetchSearchPokemon(
           "type",
           debouncedInputValue,
+          pokemonsCtx,
           pageIndex * pageSize,
-          pageSize,
-          pokemonsCtx
+          pageSize
         ),
       {
         enabled: isPokemonSearchEnabled(
@@ -60,19 +60,45 @@ function PokemonHome() {
           "type",
           debouncedInputValue
         ),
-        onSuccess: (data) => {
-          console.log(data);
-        },
-        onError: (error, query) => {
-          console.log(query);
-        },
+        onSuccess: (data) => {},
+        onError: (error, query) => {},
       }
     );
+
+  const {
+    data: dataPokemonAbilitySearch,
+    isLoading: isLoadingPokemonAbilitySearch,
+  } = useQuery(
+    querySearchPokemonKeys(
+      "ability",
+      searchOption,
+      debouncedInputValue,
+      pageIndex * pageSize,
+      pageSize
+    ),
+    () =>
+      fetchSearchPokemon(
+        "ability",
+        debouncedInputValue,
+        pokemonsCtx,
+        pageIndex * pageSize,
+        pageSize
+      ),
+    {
+      enabled: isPokemonSearchEnabled(
+        searchOption,
+        "ability",
+        debouncedInputValue
+      ),
+      onSuccess: (data) => {},
+      onError: (error, query) => {},
+    }
+  );
 
   const { data: dataPokemonNameSearch, isLoading: isLoadingPokemonNameSearch } =
     useQuery(
       querySearchPokemonKeys("name", searchOption, debouncedInputValue),
-      () => fetchSearchPokemon("name", debouncedInputValue),
+      () => fetchSearchPokemon("name", debouncedInputValue, pokemonsCtx),
       {
         enabled: isPokemonSearchEnabled(
           searchOption,
@@ -90,10 +116,12 @@ function PokemonHome() {
       dataName: dataPokemonNameSearch,
       dataType: dataPokemonTypeSearch,
       normalData: dataPokemon,
+      dataAbility: dataPokemonAbilitySearch,
     },
     {
       isLoadingPokemonNameSearch,
       isLoadingDataPokemon,
+      isLoadingPokemonAbilitySearch,
       isLoadingPokemonTypeSearch,
     }
   );
@@ -187,9 +215,13 @@ function PokemonHome() {
 
   const pageCount = Math.ceil(enabled?.data?.count / pageSize);
 
+  console.log(pokemonsCtx)
+
+
+
   const searchOptions = [
     { label: "Type", value: "type" },
-    { label: "Attributes", value: "attributes" },
+    { label: "Ability", value: "ability" },
     { label: "Name", value: "name" },
   ];
 
