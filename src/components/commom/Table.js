@@ -28,7 +28,15 @@ const fuzzySort = (rowA, rowB, columnId) => {
   return dir === 0 ? sortingFns.alphanumeric(rowA, rowB, columnId) : dir;
 };
 
-function Table({ columns, data, onSetPagination, pagination, pageCount }) {
+function Table({
+  columns,
+  data,
+  onSetPagination,
+  pagination,
+  pageCount,
+  pageSizeTableValues,
+  pageMaxCount,
+}) {
   const [globalFilter, setGlobalFilter] = React.useState("");
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [sorting, setSorting] = React.useState([]);
@@ -79,7 +87,7 @@ function Table({ columns, data, onSetPagination, pagination, pageCount }) {
     { value: "ghost", label: "Ghost" },
     { value: "dark", label: "Dark" },
     { value: "dragon", label: "Dragon" },
-    { value: "steel", label: "steel" },
+    { value: "steel", label: "Steel" },
     { value: "fairy", label: "Fairy" },
   ];
 
@@ -173,7 +181,7 @@ function Table({ columns, data, onSetPagination, pagination, pageCount }) {
           <p>No pokemon matched your filter in this page!</p>
         )}
 
-      {table.getPageCount() > 1 && columnFilters.length === 0 && (
+      {pageMaxCount > 1 && (
         <>
           <div className="h-4" />
           <span className="flex items-center gap-1">
@@ -217,7 +225,7 @@ function Table({ columns, data, onSetPagination, pagination, pageCount }) {
               table.setPageSize(Number(e.target.value));
             }}
           >
-            {[5, 10, 15, 20, 30].map((pageSize) => (
+            {pageSizeTableValues.map((pageSize) => (
               <option key={pageSize} value={pageSize}>
                 Show {pageSize}
               </option>

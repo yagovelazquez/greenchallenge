@@ -248,3 +248,53 @@ export const prefetchPokemonDataFn = async ({
     console.log(error);
   }
 };
+
+export const needUpdatePageIndex = (
+  searchOption,
+  previousValues,
+  debouncedInputValue
+) => {
+  if (
+    previousValues.current.searchOption === "" &&
+    debouncedInputValue &&
+    (searchOption === "type" ||
+      searchOption === "name" ||
+      searchOption === "ability")
+  ) {
+    return true;
+  }
+  if (
+    previousValues.current.searchOption === searchOption &&
+    searchOption !== "" &&
+    previousValues.current.debouncedInputValue !== debouncedInputValue
+  ) {
+    return true;
+  }
+  if (
+    previousValues.current.searchOption === "type" &&
+    (searchOption === "name" || searchOption === "ability")
+  ) {
+    return true;
+  }
+  if (
+    previousValues.current.searchOption === "name" &&
+    (searchOption === "type" || searchOption === "ability")
+  ) {
+    return true;
+  }
+  if (
+    previousValues.current.searchOption === "ability" &&
+    (searchOption === "type" || searchOption === "name")
+  ) {
+    return true;
+  }
+  if (
+    (previousValues.current.searchOption === "ability" ||
+      previousValues.current.searchOption === "name" ||
+      previousValues.current.searchOption === "type") &&
+    searchOption === ""
+  ) {
+    return true;
+  }
+  return false;
+};

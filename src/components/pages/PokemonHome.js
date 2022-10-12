@@ -1,14 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { queryKeys } from "../reactQuery/queryConstants";
 import { fetchPokemons } from "../lib/fetchPokemon";
 import TableComponent from "./../commom/Table";
 import Select from "../commom/Select";
 import {
-  findPagePrefetchIndex,
   isPokemonQueryEnabled,
   isPokemonSearchEnabled,
+  needUpdatePageIndex,
   querySearchPokemonKeys,
 } from "../lib/pokemonFn";
 import { fetchSearchPokemon } from "./../lib/fetchPokemon";
@@ -17,7 +17,6 @@ import PokemonsContext from "../store/pokemonsProvider";
 import useDataEnabled from "./../hooks/useDataEnabled";
 import DebouncedInput from "../commom/DebouncedInput";
 import { getPokemonColumns } from "../lib/tableColumns";
-import { queryClient } from "../reactQuery/queryClient";
 import usePrefetch from "./../hooks/usePrefetch";
 
 function PokemonHome() {
@@ -32,6 +31,25 @@ function PokemonHome() {
   const searchOptionsHandler = (e) => {
     setSearchOption(e.target.value);
   };
+
+  const previousValues = useRef({ searchOption, debouncedInputValue });
+
+  useEffect(() => {
+    if (
+      needUpdatePageIndex(
+        searchOption,
+        previousValues,
+        debouncedInputValue,
+        pageIndex
+      )
+    ) {
+      setPagination((prevValue) => {
+        previousValues.current.searchOption = searchOption;
+        previousValues.current.debouncedInputValue = debouncedInputValue;
+        return { ...prevValue, pageIndex: 0 };
+      });
+    }
+  }, [searchOption, debouncedInputValue, pageIndex]);
 
   const { data: dataPokemon, isLoading: isLoadingDataPokemon } = useQuery(
     [queryKeys.pokemons, pageIndex, pageSize],
@@ -138,8 +156,14 @@ function PokemonHome() {
     [pageIndex, pageSize]
   );
 
+  const pageSizeTableValues = React.useMemo(
+    () => [5,10,15,20,30],
+    []
+  );
+
   const columns = React.useMemo(() => getPokemonColumns(), []);
   const pageCount = Math.ceil(enabled?.data?.count / pageSize);
+  const pageMaxCount = Math.ceil(enabled?.data?.count / pageSizeTableValues[0]);
 
   usePrefetch({
     pageIndex,
@@ -160,6 +184,8 @@ function PokemonHome() {
     (value) => setDebouncedInputValue(String(value)),
     []
   );
+
+
 
   return (
     <div>
@@ -186,6 +212,8 @@ function PokemonHome() {
           onSetPagination={setPagination}
           pagination={pagination}
           debouncedInputValue={debouncedInputValue}
+          pageSizeTableValues={pageSizeTableValues}
+          pageMaxCount={pageMaxCount}
         />
       )}
       <ReactQueryDevtools />

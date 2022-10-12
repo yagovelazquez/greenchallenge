@@ -29,7 +29,7 @@ function Select({
       focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none ${selectClasses}`}
           aria-label="Default select example"
         >
-          {firstOption && <option>{firstOption}</option>}
+          {firstOption && <option value="">{firstOption}</option>}
           {options.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
