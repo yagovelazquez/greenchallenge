@@ -1,5 +1,5 @@
 import PokemonsContext from "./pokemonsProvider";
-import { useReducer, useState } from "react";
+import {  useState } from "react";
 
 const defaultPokemonTypeState = {};
 
@@ -40,10 +40,9 @@ function PokemonsProvider(props) {
   const getPokemonsNotFetched = (pokemons, isSearching) => {
     const pokemonsNotFetched = [];
     const pokemonsFetched = [];
-    console.log(pokemons)
-    pokemons.forEach((item) => {
 
-      let pokemon = isSearching ? item.pokemon : item
+    pokemons.forEach((item) => {
+      let pokemon = isSearching ? item.pokemon : item;
 
       return checkOnePokemonExists(pokemon.name)
         ? pokemonsFetched.push(pokemonState[pokemon.name])

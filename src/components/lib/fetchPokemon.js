@@ -1,5 +1,5 @@
 import { serverUrl } from "../reactQuery/queryUrl";
-import List from "../commom/List";
+
 import {
   processPokemonData,
   getFetchSearchPokemonFns,
@@ -50,27 +50,23 @@ export const fetchPokemonDetails = (data) => {
 
 export const fetchPokemons = async (limit, offset, pokemonsCtx) => {
   try {
-      const data = await getPokemons(limit, offset);
+    const data = await getPokemons(limit, offset);
 
-      const { pokemonsNotFetched, pokemonsFetched } =
-      pokemonsCtx.getPokemonsNotFetched(
-       data.results
-      );
+    const { pokemonsNotFetched, pokemonsFetched } =
+      pokemonsCtx.getPokemonsNotFetched(data.results);
 
-      if (pokemonsNotFetched.length === 0)
+    if (pokemonsNotFetched.length === 0)
       return { pokemons: pokemonsFetched, count: data.count };
 
-      const promises = fetchPokemonDetails(pokemonsNotFetched);
-      const results = await Promise.all(promises);
-      pokemonsCtx.addPokemons(results);
+    const promises = fetchPokemonDetails(pokemonsNotFetched);
+    const results = await Promise.all(promises);
+    pokemonsCtx.addPokemons(results);
 
-      if (pokemonsFetched.length === 0)
+    if (pokemonsFetched.length === 0)
       return { pokemons: results, count: data.count };
 
-
-      pokemonsFetched.push(...results);
-      return { pokemons: pokemonsFetched, count: data.count };
-  
+    pokemonsFetched.push(...results);
+    return { pokemons: pokemonsFetched, count: data.count };
   } catch (error) {
     throw new Error(error.message || "Something went wrong");
   }
@@ -148,9 +144,7 @@ export const fetchSearchPokemon = async (
     const paginatedPokemonData = data.slice(offset, offset + limit);
 
     const { pokemonsNotFetched, pokemonsFetched } =
-      pokemonsCtx.getPokemonsNotFetched(
-        paginatedPokemonData, true
-      );
+      pokemonsCtx.getPokemonsNotFetched(paginatedPokemonData, true);
 
     if (pokemonsNotFetched.length === 0)
       return { pokemons: pokemonsFetched, count: data.length };

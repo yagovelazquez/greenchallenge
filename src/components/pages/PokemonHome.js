@@ -1,11 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import React from "react";
+import React, { useEffect } from "react";
 import { queryKeys } from "../reactQuery/queryConstants";
 import { fetchPokemons } from "../lib/fetchPokemon";
 import TableComponent from "./../commom/Table";
 import Select from "../commom/Select";
 import {
+  findPagePrefetchIndex,
   isPokemonQueryEnabled,
   isPokemonSearchEnabled,
   querySearchPokemonKeys,
@@ -15,6 +16,9 @@ import { useContext } from "react";
 import PokemonsContext from "../store/pokemonsProvider";
 import useDataEnabled from "./../hooks/useDataEnabled";
 import DebouncedInput from "../commom/DebouncedInput";
+import { getPokemonColumns } from "../lib/tableColumns";
+import { queryClient } from "../reactQuery/queryClient";
+import usePrefetch from "./../hooks/usePrefetch";
 
 function PokemonHome() {
   const pokemonsCtx = useContext(PokemonsContext);
@@ -40,8 +44,8 @@ function PokemonHome() {
   const { data: dataPokemonTypeSearch, isLoading: isLoadingPokemonTypeSearch } =
     useQuery(
       querySearchPokemonKeys(
-        "type",
         searchOption,
+        "type",
         debouncedInputValue,
         pageIndex * pageSize,
         pageSize
@@ -70,8 +74,8 @@ function PokemonHome() {
     isLoading: isLoadingPokemonAbilitySearch,
   } = useQuery(
     querySearchPokemonKeys(
-      "ability",
       searchOption,
+      "ability",
       debouncedInputValue,
       pageIndex * pageSize,
       pageSize
@@ -97,7 +101,7 @@ function PokemonHome() {
 
   const { data: dataPokemonNameSearch, isLoading: isLoadingPokemonNameSearch } =
     useQuery(
-      querySearchPokemonKeys("name", searchOption, debouncedInputValue),
+      querySearchPokemonKeys(searchOption, "name", debouncedInputValue),
       () => fetchSearchPokemon("name", debouncedInputValue, pokemonsCtx),
       {
         enabled: isPokemonSearchEnabled(
@@ -134,96 +138,28 @@ function PokemonHome() {
     [pageIndex, pageSize]
   );
 
-  const columns = [
-    {
-      accessorKey: "image",
-      header: "",
-      cell: (info) => info.getValue(),
-      enableSorting: false,
-    },
-    {
-      accessorKey: "name",
-      header: "Name",
-      cell: (info) => info.getValue(),
-    },
-    {
-      accessorKey: "abilitiesComponent",
-      header: "Abilities",
-      cell: (info) => info.getValue(),
-      enableSorting: false,
-    },
-    {
-      accessorKey: "typeComponent",
-      header: "Type",
-      cell: (info) => info.getValue(),
-      enableSorting: false,
-    },
-    {
-      accessorKey: "types",
-      header: "Types",
-      cell: (info) => info.getValue(),
-      enableSorting: false,
-    },
-    {
-      accessorKey: "height",
-      header: "Height",
-      cell: (info) => info.getValue(),
-      enableSorting: false,
-    },
-    {
-      header: "Stats",
-      columns: [
-        {
-          accessorKey: "hp",
-          header: "Hp",
-          cell: (info) => info.getValue(),
-          enableSorting: false,
-        },
-        {
-          accessorKey: "attack",
-          header: "Atk",
-          cell: (info) => info.getValue(),
-          enableSorting: false,
-        },
-        {
-          accessorKey: "defense",
-          header: "Def",
-          cell: (info) => info.getValue(),
-          enableSorting: false,
-        },
-        {
-          accessorKey: "special-attack",
-          header: "S.Atk",
-          cell: (info) => info.getValue(),
-          enableSorting: false,
-        },
-        {
-          accessorKey: "special-defense",
-          header: "S.Def",
-          cell: (info) => info.getValue(),
-          enableSorting: false,
-        },
-        {
-          accessorKey: "speed",
-          header: "Spd",
-          cell: (info) => info.getValue(),
-          enableSorting: false,
-        },
-      ],
-    },
-  ];
-
+  const columns = React.useMemo(() => getPokemonColumns(), []);
   const pageCount = Math.ceil(enabled?.data?.count / pageSize);
 
-  console.log(pokemonsCtx)
-
-
+  usePrefetch({
+    pageIndex,
+    pageCount,
+    searchOption,
+    debouncedInputValue,
+    pageSize,
+    enabled,
+  });
 
   const searchOptions = [
     { label: "Type", value: "type" },
     { label: "Ability", value: "ability" },
     { label: "Name", value: "name" },
   ];
+
+  const debounceValueChangeHandler = React.useCallback(
+    (value) => setDebouncedInputValue(String(value)),
+    []
+  );
 
   return (
     <div>
@@ -235,9 +171,10 @@ function PokemonHome() {
       />
       <DebouncedInput
         value={""}
-        onChange={(value) => setDebouncedInputValue(String(value))}
+        onChange={debounceValueChangeHandler}
         className="p-2 font-lg shadow border border-block"
         placeholder="Search all columns..."
+        searchOption={searchOption}
       />
       {enabled?.isLoading ? (
         "Loading..."

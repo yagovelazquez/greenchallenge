@@ -1,7 +1,16 @@
 import List from "../commom/List";
 import { queryKeys } from "../reactQuery/queryConstants";
-import Image from "./../commom/Image";
+import ImageComponent from "./../commom/Image";
 import { serverUrl } from "../reactQuery/queryUrl";
+import { queryClient } from "../reactQuery/queryClient";
+import { fetchPokemons, fetchSearchPokemon } from "./fetchPokemon";
+
+export const deep_value = function (obj, path) {
+  for (var i = 0, path = path.split("."), len = path.length; i < len; i++) {
+    obj = obj[path[i]];
+  }
+  return obj;
+};
 
 export const isPokemonQueryEnabled = (debouncedInputValue, searchCategory) =>
   debouncedInputValue && searchCategory ? false : true;
@@ -13,7 +22,7 @@ export const getPokemonImageUrl = (sprites) =>
 
 export const querySearchPokemonKeys = (
   searchCategory,
-  actualCategoryValue,
+  actualSearchCategory,
   debouncedInputValue,
   offset,
   limit
@@ -44,8 +53,8 @@ export const querySearchPokemonKeys = (
   }
 
   return isPokemonSearchEnabled(
+    actualSearchCategory,
     searchCategory,
-    actualCategoryValue,
     debouncedInputValue
   )
     ? keys
@@ -82,8 +91,9 @@ export const processPokemonData = ({
   const processedPokemonData = {
     name,
     types: processedTypes,
+    url: getPokemonImageUrl(sprites),
     image: (
-      <Image
+      <ImageComponent
         url={getPokemonImageUrl(sprites)}
         className="h-[60px] w-[60px]"
         alt={name}
@@ -141,5 +151,100 @@ export const getCategoryUrl = (searchCategory, searchValue) => {
 
     default:
       return null;
+  }
+};
+
+export const findPagePrefetchIndex = ({
+  pageIndex,
+  pageCount,
+  searchOption,
+  debouncedInputValue,
+  pageSize,
+}) => {
+  const nextPage = pageIndex + 1;
+  const previousPage = pageIndex - 1;
+
+  if (nextPage < pageCount) {
+    return nextPage;
+  }
+
+  if (
+    pageIndex > 0 &&
+    !queryClient.getQueriesData(
+      querySearchPokemonKeys(
+        "type",
+        searchOption,
+        debouncedInputValue,
+        previousPage * pageSize,
+        pageSize
+      )
+    ).length !== 0
+  ) {
+    return previousPage;
+  }
+};
+
+export const cacheImages = async (srcArray, srcPath) => {
+  try {
+    const promises = await srcArray.map((item) => {
+      return new Promise(function (resolve, reject) {
+        const img = new Image();
+        img.src = srcPath ? deep_value(item, srcPath) : item;
+        img.onload = () => {
+          return resolve();
+        };
+        img.onerror = () => reject();
+      });
+    });
+    await Promise.all(promises);
+  } catch (error) {
+    return;
+  }
+};
+
+export const prefetchPokemonDataFn = async ({
+  pageIndex,
+  searchOption,
+  debouncedInputValue,
+  pageSize,
+  pokemonsCtx,
+  isSearch,
+}) => {
+  try {
+    if (isSearch) {
+      const resultData = await queryClient.fetchQuery(
+        querySearchPokemonKeys(
+          searchOption,
+          searchOption,
+          debouncedInputValue,
+          pageIndex * pageSize,
+          pageSize
+        ),
+        () =>
+          fetchSearchPokemon(
+            searchOption,
+            debouncedInputValue,
+            pokemonsCtx,
+            pageIndex * pageSize,
+            pageSize
+          )
+      );
+
+      const url = resultData.pokemons.map((pokemon) => pokemon.url);
+      cacheImages(url);
+    }
+
+    if (!isSearch) {
+      const queryKey = [queryKeys.pokemons, pageIndex, pageSize];
+
+      const resultData = await queryClient.fetchQuery(queryKey, () =>
+        fetchPokemons(pageSize, pageIndex * pageSize, pokemonsCtx)
+      );
+
+      const url = resultData.pokemons.map((pokemon) => pokemon.url);
+      cacheImages(url);
+    }
+  } catch (error) {
+    console.log(error);
   }
 };

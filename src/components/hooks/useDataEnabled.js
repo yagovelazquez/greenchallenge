@@ -8,10 +8,8 @@ function useDataEnabled(
   data,
   loading
 ) {
-
-
   if (isPokemonQueryEnabled(debouncedInputValue, actualCategoryValue)) {
-    return { data: data.normalData, isLoading: loading.isLoadingDataPokemon };
+    return { data: data.normalData, isLoading: loading.isLoadingDataPokemon,   queryEnabled: "normal", };
   }
   if (
     isPokemonSearchEnabled(actualCategoryValue, "name", debouncedInputValue)
@@ -19,6 +17,7 @@ function useDataEnabled(
     return {
       data: data.dataName,
       isLoading: loading.isLoadingPokemonNameSearch,
+      queryEnabled: "name",
     };
   }
   if (
@@ -27,6 +26,7 @@ function useDataEnabled(
     return {
       data: data.dataType,
       isLoading: loading.isLoadingPokemonTypeSearch,
+      queryEnabled: "type",
     };
   }
 
@@ -36,6 +36,7 @@ function useDataEnabled(
     return {
       data: data.dataAbility,
       isLoading: loading.isLoadingPokemonAbilitySearch,
+      queryEnabled: "ability",
     };
   }
 }
