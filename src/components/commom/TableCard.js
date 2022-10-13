@@ -66,34 +66,36 @@ function TableCard({ data }) {
             key={name}
             className="tablet:hidden text-gray-600 p-4 pr-7 rounded-lg border flex-col shadow-md my-10 w-full min-h-[300px] bg-white border-gray-300"
           >
-            <div className="flex align-center justify-center w-full  ">
+            <div className="flex align-center ">
               <ImageComponent
                 url={url}
-                className="min-h-[90px] max-h-[90px] max-w[90px] min-w-[80px] mr-4"
+                className="min-h-[110px] max-h-[110px] max-w[110px] min-w-[110px] mr-4"
                 alt={name}
               ></ImageComponent>
-              <div className="justify-between flex-col w-full flex">
-                <ItemList attribute="Name" value={name}></ItemList>
-                <ItemList
-                  attribute="Abilities"
-                  value={
-                    <List
-                      listItems={abilities}
-                      styles={"text-right capitalize"}
-                      variant={"abilitiesList"}
-                    />
-                  }
-                ></ItemList>
-                <ItemList attribute="Types" value={typeComponent}></ItemList>
-                <StatsList
-                  height={height}
-                  attack={attack}
-                  sAttack={sAttack}
-                  sDefense={sDefense}
-                  speed={speed}
-                  defense={defense}
-                ></StatsList>
-              </div>
+              <h2 className="tracking-normal  h-min my-auto italic font-garamond text-3xl capitalize">
+                {name}
+              </h2>
+            </div>
+            <div className="justify-between flex-col w-full flex">
+              <ItemList
+                attribute="Abilities"
+                value={
+                  <List
+                    listItems={abilities}
+                    styles={"text-right capitalize"}
+                    variant={"abilitiesList"}
+                  />
+                }
+              ></ItemList>
+              <ItemList attribute="Types" value={typeComponent}></ItemList>
+              <StatsList
+                height={height}
+                attack={attack}
+                sAttack={sAttack}
+                sDefense={sDefense}
+                speed={speed}
+                defense={defense}
+              ></StatsList>
             </div>
           </div>
         );
