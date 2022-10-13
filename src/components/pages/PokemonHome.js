@@ -1,10 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import React, { useEffect, useRef } from "react";
 import { queryKeys } from "../reactQuery/queryConstants";
 import { fetchPokemons } from "../lib/fetchPokemon";
 import TableComponent from "./../commom/Table";
-import Select from "../commom/Select";
 import {
   isPokemonQueryEnabled,
   isPokemonSearchEnabled,
@@ -15,11 +13,8 @@ import { fetchSearchPokemon } from "./../lib/fetchPokemon";
 import { useContext } from "react";
 import PokemonsContext from "../store/pokemonsProvider";
 import useDataEnabled from "./../hooks/useDataEnabled";
-import DebouncedInput from "../commom/DebouncedInput";
 import { getPokemonColumns } from "../lib/tableColumns";
 import usePrefetch from "./../hooks/usePrefetch";
-import LoadingSpinner from "../commom/LoadingSpinner";
-import Modal from "./../commom/Modal";
 import LoadingSpinnerModal from "./../commom/LoadingSpinnerModal";
 
 function PokemonHome() {
@@ -235,12 +230,14 @@ function PokemonHome() {
     selectValue: searchOption,
     placeholder: "Select a search category",
     width: "100%",
-    divStyles: "tablet:text-base text-lg w-full tablet:w-[240px]"
+    divStyles: "tablet:text-base text-lg w-full tablet:w-[240px]",
   };
 
   return (
     <div className="bg-gray-200 min-h-screen">
-      <LoadingSpinnerModal enabled={enabled}/>
+
+      <LoadingSpinnerModal enabled={enabled} />
+
       <TableComponent
         data={enabled?.data?.pokemons || []}
         pageCount={pageCount}
@@ -257,7 +254,6 @@ function PokemonHome() {
         pageMaxCount={pageMaxCount}
         searchServerSelectProps={searchServerSelectProps}
       />
-      <ReactQueryDevtools></ReactQueryDevtools>
     </div>
   );
 }

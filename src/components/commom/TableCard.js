@@ -1,8 +1,10 @@
 import ImageComponent from "./../commom/Image";
-import { getPokemonImageUrl } from "../lib/pokemonFn";
 import List from "./List";
+import { useContext } from "react";
+import ModalContext from "../store/modalProvider";
 
 function TableCard({ data }) {
+  const modalCtx = useContext(ModalContext)
   function ItemList({ attribute, value, styles }) {
     return (
       <div
@@ -19,6 +21,10 @@ function TableCard({ data }) {
       </div>
     );
   }
+
+ const nameClickHandler = (pokemon) => {
+  modalCtx.onModal({isModal: true, data: pokemon})
+ }
 
   function StatsList({ height, attack, defense, speed, sAttack, sDefense }) {
     const stats = [
@@ -72,7 +78,7 @@ function TableCard({ data }) {
                 className="min-h-[110px] max-h-[110px] max-w[110px] min-w-[110px] mr-4"
                 alt={name}
               ></ImageComponent>
-              <h2 className="tracking-normal  h-min my-auto italic font-garamond text-3xl capitalize">
+              <h2 onClick={() => nameClickHandler(pokemon.original)} className="tracking-normal cursor-pointer h-min my-auto italic font-garamond text-3xl capitalize">
                 {name}
               </h2>
             </div>

@@ -1,6 +1,6 @@
 import * as React from "react";
 import DebouncedInput from "./DebouncedInput";
-
+import { useContext } from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -12,7 +12,7 @@ import {
 
 import { GoTriangleDown, GoTriangleUp } from "react-icons/go";
 import TableCard from "./TableCard";
-
+import ModalContext from "../store/modalProvider";
 import Select from "./Select";
 import PaginationController from "./PaginationController";
 import TableMessage from "./TableMessage";
@@ -36,6 +36,7 @@ function Table({
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [sorting, setSorting] = React.useState([]);
   const [grouping, setGrouping] = React.useState([]);
+  const modalCtx = useContext(ModalContext);
 
   const table = useReactTable({
     data,
@@ -76,15 +77,15 @@ function Table({
       <div className="w-full max-w-[750px] tablet:m-10 m-4  ">
         <div className="tablet:mb-6 flex justify-between w-full max-w-[750px] flex-wrap items-center gap-4">
           <div className="flex tablet:flex-row flex-col-reverse w-full tablet:w-auto gap-4">
-          <DebouncedInput
-            value={""}
-            onChange={onDebounceValueChange}
-            className="p-2 font-lg shadow border tablet:text-base text-lg w-full tablet:w-auto  border-block rounded h-[42px] tablet:h-[38px] focus:outline-none font-garamond font-medium placeholder:text-[rgb(128,128,128)]"
-            placeholder="Search a pokémon"
-            searchOption={searchOption}
-          />
+            <DebouncedInput
+              value={""}
+              onChange={onDebounceValueChange}
+              className="p-2 font-lg shadow border tablet:text-base text-lg w-full tablet:w-auto  border-block rounded h-[42px] tablet:h-[38px] focus:outline-none font-garamond font-medium placeholder:text-[rgb(128,128,128)]"
+              placeholder="Search a pokémon"
+              searchOption={searchOption}
+            />
 
-          <Select {...searchServerSelectProps} />
+            <Select {...searchServerSelectProps} />
           </div>
 
           <div className="flex items-center w-full tablet:w-auto justify-center gap-2">
@@ -96,7 +97,9 @@ function Table({
                 return columnType.setFilterValue(e.value);
               }}
               width="100%"
-              divStyles={"flex justify-center w-full tablet:w-[120px] tablet:text-base text-lg"}
+              divStyles={
+                "flex justify-center w-full tablet:w-[120px] tablet:text-base text-lg"
+              }
               defaultValue={dropDownValues[0]}
               selectValue={columnType.getFilterValue()}
               options={dropDownValues}
@@ -151,9 +154,18 @@ function Table({
                       key={cell.id}
                       className={`${cell.column.columnDef.tdClassName} capitalize border-gray-300 border-b  font-garamond text-sm font-medium`}
                     >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
+                      {!cell.column.columnDef.openPokemonInfo ? (
+                        flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )
+                      ) : (
+                        <div className="hover:cursor-pointer underline-offset-4" onClick={() => modalCtx.onModal({isModal: true, data: cell.getContext().row.original})}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </div>
                       )}
                     </td>
                   ))}
@@ -173,15 +185,15 @@ function Table({
           type="filter"
           validationData={validationData}
         />
-        <TableCard data={table.getPrePaginationRowModel().rows}/>
-        {pageMaxCount > 1 && (
-          <PaginationController
-            table={table}
-            pageSizeTableValues={pageSizeTableValues}
-          />
-        )}
-       </div>
-
+        <TableCard data={table.getPrePaginationRowModel().rows} />
+        {pageMaxCount > 1 &&
+          table.getPrePaginationRowModel().rows.length > 0 && (
+            <PaginationController
+              table={table}
+              pageSizeTableValues={pageSizeTableValues}
+            />
+          )}
+      </div>
     </div>
   );
 }

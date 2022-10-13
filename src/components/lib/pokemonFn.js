@@ -20,6 +20,10 @@ export const getPokemonImageUrl = (sprites) =>
   sprites.versions["generation-viii"].icons.front_default ||
   sprites.other["official-artwork"].front_default;
 
+export const getPokemonArtWork = (sprites) => 
+sprites.other["official-artwork"].front_default ||
+sprites.versions["generation-viii"].icons.front_default 
+
 export const querySearchPokemonKeys = (
   searchCategory,
   actualSearchCategory,
@@ -75,8 +79,16 @@ export const processPokemonData = ({
   height,
   weight,
   abilities,
+  base_experience,
+  held_items,
   sprites,
   stats,
+}, {
+  base_happiness,
+  gender_rate,
+  capture_rate,
+  egg_groups,
+  habitat
 }) => {
   const typeComponent = <List listItems={types} variant="typeIcon" />;
   const processedTypes = types.map((typeData) => typeData.type.name).join(", ");
@@ -101,6 +113,14 @@ export const processPokemonData = ({
     ),
     id,
     height,
+    held_items,
+    base_experience,
+    base_happiness,
+    gender_rate,
+    capture_rate,
+    egg_groups,
+    habitat,
+    sprites,
     weight,
     abilities,
     typeComponent,
@@ -245,7 +265,7 @@ export const prefetchPokemonDataFn = async ({
       cacheImages(url);
     }
   } catch (error) {
-    console.log(error);
+  return
   }
 };
 

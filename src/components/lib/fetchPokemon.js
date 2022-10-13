@@ -40,10 +40,28 @@ export const getPokemonInfo = async (url) => {
   return data;
 };
 
+
+export const getPokemonInfoSpecies = async (url) => {
+  const response = await fetch(url, {
+    method: "GET",
+  });
+
+  const data = await response.json();
+  if (!response.ok) {
+    let errorMessage;
+    errorMessage = data?.error;
+
+    throw new Error(errorMessage || "Something went wrong");
+  }
+
+  return data;
+};
+
 export const fetchPokemonDetails = (data) => {
   return data.map(async (pokemon) => {
     const pokemonInfo = await getPokemonInfo(pokemon.url);
-    const processedPokemonData = processPokemonData(pokemonInfo);
+    const pokemonSpeciesInfo = await getPokemonInfoSpecies(pokemonInfo.species.url)
+    const processedPokemonData = processPokemonData(pokemonInfo, pokemonSpeciesInfo);
     return processedPokemonData;
   });
 };
@@ -159,7 +177,6 @@ export const fetchSearchPokemon = async (
     pokemonsFetched.push(...results);
     return { pokemons: pokemonsFetched, count: data.length };
   } catch (error) {
-    console.log(error, "aiii");
     throw new Error(error.message || "Something went wrong");
   }
 };

@@ -14,6 +14,7 @@ export const getPokemonColumns = () => ([
       header: "Name",
       cell: (info) => info.getValue(),
       thClassName: "pr-16 w-full",
+      openPokemonInfo: true,
     },
     {
       accessorKey: "abilitiesComponent",
@@ -27,7 +28,7 @@ export const getPokemonColumns = () => ([
       header: "Type",
       cell: (info) => info.getValue(),
       enableSorting: false,
-      thClassName: "pl-3 pr-14   w-[80px]"
+      thClassName: "pl-3 pr-14 w-[80px]"
     },
     {
       accessorKey: "types",

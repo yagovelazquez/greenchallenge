@@ -1,17 +1,19 @@
 import { MdErrorOutline } from "react-icons/md";
 
-function TableMessage({ type, validationData, message }) {
-  const { table, columnFilters, isLoading } = validationData;
+function TableMessage({ type, validationData, message, female }) {
+
+  
 
   const validation = {
+    pokemonWithoutSex: () => female < 0 ,
     search: () =>
-      table.getPrePaginationRowModel().rows.length === 0 &&
-      columnFilters.length === 0 &&
-      !isLoading,
+    validationData.table.getPrePaginationRowModel().rows.length === 0 &&
+    validationData.columnFilters.length === 0 &&
+      !validationData.isLoading,
     filter: () =>
-      table.getPrePaginationRowModel().rows.length === 0 &&
-      columnFilters.length > 0 &&
-      !isLoading,
+    validationData.table.getPrePaginationRowModel().rows.length === 0 &&
+    validationData.columnFilters.length > 0 &&
+      !validationData.isLoading,
   };
 
   if (!validation[type]) console.log("Validation Type Incorrect");
