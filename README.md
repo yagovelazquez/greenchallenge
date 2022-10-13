@@ -1,6 +1,7 @@
-# Getting Started with Create React App
+# See the project live at
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+https://greenchallenge.yagovelazquez.com/
+
 
 ## Getting Started:
 
