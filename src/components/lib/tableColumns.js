@@ -3,17 +3,17 @@ export const getPokemonColumns = () => ([
   thClassName: "!border-b-0 !p-0 text-center h-[15px]",
     columns: [
     {
-      accessorKey: "image",
+      accessorKey: "ImageComponent",
       header: "",
       cell: (info) => info.getValue(),
-      thClassName: "w-[80px]",
+      thClassName: "min-w-[80px]",
       enableSorting: false,
     },
     {
       accessorKey: "name",
       header: "Name",
       cell: (info) => info.getValue(),
-      thClassName: "pr-16",
+      thClassName: "pr-16 w-full",
     },
     {
       accessorKey: "abilitiesComponent",

@@ -11,6 +11,7 @@ import {
 } from "@tanstack/react-table";
 
 import { GoTriangleDown, GoTriangleUp } from "react-icons/go";
+import TableCard from "./TableCard";
 
 import Select from "./Select";
 import PaginationController from "./PaginationController";
@@ -71,30 +72,31 @@ function Table({
   };
 
   return (
-    <div className="p-8 bg-gray-200 flex items-center   flex-col">
-      <div className="w-full max-w-[750px] m-10">
-        <div className="mb-6 flex justify-between w-full max-w-[750px] flex-wrap items-center gap-4">
-          <div className="flex gap-4">
+    <div className="p-8  flex items-center 	    flex-col">
+      <div className="w-full max-w-[750px] tablet:m-10 m-4  ">
+        <div className="tablet:mb-6 flex justify-between w-full max-w-[750px] flex-wrap items-center gap-4">
+          <div className="flex tablet:flex-row flex-col-reverse w-full tablet:w-auto gap-4">
           <DebouncedInput
             value={""}
             onChange={onDebounceValueChange}
-            className="p-2 font-lg shadow border border-block rounded h-[38px] focus:outline-none font-garamond font-medium placeholder:text-[rgb(128,128,128)]"
-            placeholder="Search all columns..."
+            className="p-2 font-lg shadow border tablet:text-base text-lg w-full tablet:w-auto  border-block rounded h-[42px] tablet:h-[38px] focus:outline-none font-garamond font-medium placeholder:text-[rgb(128,128,128)]"
+            placeholder="Search a pokémon"
             searchOption={searchOption}
           />
 
           <Select {...searchServerSelectProps} />
           </div>
 
-          <div className="flex items-center  justify-center gap-2">
-            <span className="ml-auto font-garamond font-medium text-md">
+          <div className="flex items-center w-full tablet:w-auto justify-center gap-2">
+            <span className="ml-auto font-garamond text-xl font-medium tablet:text-base">
               Filter:{" "}
             </span>
             <Select
               onChange={(e) => {
                 return columnType.setFilterValue(e.value);
               }}
-              width="120px"
+              width="100%"
+              divStyles={"flex justify-center w-full tablet:w-[120px] tablet:text-base text-lg"}
               defaultValue={dropDownValues[0]}
               selectValue={columnType.getFilterValue()}
               options={dropDownValues}
@@ -102,7 +104,7 @@ function Table({
           </div>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full max-w-[750px] bg-white min-w-[610px]">
+          <table className="w-full max-w-[750px] bg-white min-w-[610px] hidden tablet:block">
             <thead className="overflow-visible">
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
@@ -171,14 +173,15 @@ function Table({
           type="filter"
           validationData={validationData}
         />
-
+        <TableCard data={table.getPrePaginationRowModel().rows}/>
         {pageMaxCount > 1 && (
           <PaginationController
             table={table}
             pageSizeTableValues={pageSizeTableValues}
           />
         )}
-      </div>
+       </div>
+
     </div>
   );
 }

@@ -92,7 +92,7 @@ export const processPokemonData = ({
     name,
     types: processedTypes,
     url: getPokemonImageUrl(sprites),
-    image: (
+    ImageComponent: (
       <ImageComponent
         url={getPokemonImageUrl(sprites)}
         className="h-[60px] w-[60px]"

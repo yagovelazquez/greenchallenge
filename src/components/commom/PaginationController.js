@@ -18,9 +18,9 @@ function PaginationController({ table, pageSizeTableValues }) {
   };
 
   return (
-    <div className="flex my-6 justify-between items-center w-full max-w-[750px]">
-      <div className="flex gap-3">
-        <span className="flex items-center gap-1 text-md font-medium font-garamond">
+    <div className="flex tablet:my-6 my-4 justify-between flex-col tablet:flex-row gap-4 tablet:gap-0 items-center w-full max-w-[750px]">
+      <div className="flex gap-3 w-full tablet:w-auto justify-start md:justify-center">
+        <span className="flex items-center  gap-1 text-xl tablet:text-base font-medium font-garamond">
           <div>Page</div>
           <strong> {table.getState().pagination.pageIndex + 1}</strong> of{" "}
           <strong> {table.getPageCount()}</strong>
@@ -29,7 +29,7 @@ function PaginationController({ table, pageSizeTableValues }) {
           options={pageSizeTableValues}
           value={value}
           isSearchable={false}
-          width="120px"
+          width="100%"
           onChange={(e) => {
             table.setPageSize(Number(e.value));
           }}

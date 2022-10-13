@@ -3,15 +3,18 @@ module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     fontFamily: {
-      'sans': ['"Open Sans", ui-sans-serif', 'system-ui'],
-      'serif': ['ui-serif', 'Georgia'],
-      'mono': ['ui-monospace', 'SFMono-Regular'],
-      'display': ['Oswald'],
-      'body': ['"Open Sans"'],
+      sans: ['"Open Sans", ui-sans-serif', "system-ui"],
+      serif: ["ui-serif", "Georgia"],
+      mono: ["ui-monospace", "SFMono-Regular"],
+      display: ["Oswald"],
+      body: ['"Open Sans"'],
     },
     extend: {
+      screens: {
+        tablet: "500px"
+      },
       fontFamily: {
-      "garamond": ['"Cormorant Garamond"', 'sans-serif']
+        garamond: ['"Cormorant Garamond"', "sans-serif"],
       },
       colors: {
         fighting: {
@@ -98,11 +101,11 @@ module.exports = {
       },
     },
   },
- safelist: [
+  safelist: [
     {
-      pattern: /text-(fairy|dragon|ice|fire|grass|electric|dark|water|rock|poison|flying|bug|ghost|steel|normal|fighting|ground|psychic)-(dark|light)/,
+      pattern:
+        /text-(fairy|dragon|ice|fire|grass|electric|dark|water|rock|poison|flying|bug|ghost|steel|normal|fighting|ground|psychic)-(dark|light)/,
     },
   ],
   plugins: [],
 };
-

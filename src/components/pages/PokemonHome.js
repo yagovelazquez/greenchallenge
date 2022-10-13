@@ -234,11 +234,12 @@ function PokemonHome() {
     onChange: searchOptionsHandler,
     selectValue: searchOption,
     placeholder: "Select a search category",
-    width: "207px",
+    width: "100%",
+    divStyles: "tablet:text-base text-lg w-full tablet:w-[240px]"
   };
 
   return (
-    <div>
+    <div className="bg-gray-200 min-h-screen">
       <LoadingSpinnerModal enabled={enabled}/>
       <TableComponent
         data={enabled?.data?.pokemons || []}
@@ -256,6 +257,7 @@ function PokemonHome() {
         pageMaxCount={pageMaxCount}
         searchServerSelectProps={searchServerSelectProps}
       />
+      <ReactQueryDevtools></ReactQueryDevtools>
     </div>
   );
 }

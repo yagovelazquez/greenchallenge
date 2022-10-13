@@ -8,6 +8,7 @@ function Select({
   isSearchable,
   defaultValue,
   width,
+  divStyles,
   value
 }) {
   const defaultStyles = {
@@ -36,7 +37,7 @@ function Select({
   };
 
   return (
-    <div className="flex justify-center">
+    <div className={divStyles ? divStyles : "flex w-full justify-center"}>
       <ReactSelect
         placeholder={placeholder}
         value={value}

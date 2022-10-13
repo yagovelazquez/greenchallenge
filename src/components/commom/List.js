@@ -1,6 +1,6 @@
 import { setTypeIcon } from "../lib/setTypeIcon";
 
-function List({ listItems, variant }) {
+function List({ listItems, variant, styles }) {
   let processedItems;
   if (variant === "typeIcon") {
       processedItems = listItems?.map((typeData) => {
@@ -31,7 +31,7 @@ function List({ listItems, variant }) {
             </span>
           </li>
         ))}
-      {variant === "abilitiesList" && processedItems.map((ability) => <li className="capitalize align-middle" key={ability}>{ability}</li>)}
+      {variant === "abilitiesList" && processedItems.map((ability) => <li className={styles ? styles : "capitalize"} key={ability}>{ability}</li>)}
     </ul>
   );
 }
