@@ -17,10 +17,13 @@ function DebouncedInput({
     return () => clearTimeout(timeout);
   }, [value, debounce, onChange]);
 
+  console.log(props)
+
   return (
     <input
       {...props}
       value={value}
+      
       onChange={(e) => setValue(e.target.value)}
     />
   );

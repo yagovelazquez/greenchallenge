@@ -1,4 +1,7 @@
 export const getPokemonColumns = () => ([
+  { header: " ",
+  thClassName: "!border-b-0 !p-0 text-center h-[15px]",
+    columns: [
     {
       accessorKey: "image",
       header: "",
@@ -21,22 +24,24 @@ export const getPokemonColumns = () => ([
       header: "Type",
       cell: (info) => info.getValue(),
       enableSorting: false,
+      thClassName: "pl-3"
     },
     {
       accessorKey: "types",
       header: "Types",
       cell: (info) => info.getValue(),
       enableSorting: false,
-    },
-    {
-      accessorKey: "height",
-      header: "Height",
-      cell: (info) => info.getValue(),
-      enableSorting: false,
-    },
+    }]},
     {
       header: "Stats",
+      thClassName: "text-center h-[15px] translate-y-3 !p-0 align-bottom !border-b-0" ,
       columns: [
+        {
+          accessorKey: "height",
+          header: "Ht",
+          cell: (info) => info.getValue(),
+          enableSorting: false,
+        },
         {
           accessorKey: "hp",
           header: "Hp",

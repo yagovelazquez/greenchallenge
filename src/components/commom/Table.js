@@ -1,4 +1,5 @@
 import * as React from "react";
+import DebouncedInput from "./DebouncedInput";
 
 import {
   flexRender,
@@ -12,8 +13,9 @@ import {
 } from "@tanstack/react-table";
 
 import { compareItems } from "@tanstack/match-sorter-utils";
-import DropdownColumnFilter from "./DropdownColumnFilter";
 import { setTypeIcon } from "./../lib/setTypeIcon";
+import Select from "./Select";
+import PaginationController from "./PaginationController";
 
 const fuzzySort = (rowA, rowB, columnId) => {
   let dir = 0;
@@ -33,9 +35,14 @@ function Table({
   data,
   onSetPagination,
   pagination,
+  searchOption,
+  onDebounceValueChange,
+  searchServerSelectProps,
   pageCount,
   pageSizeTableValues,
   pageMaxCount,
+  dropDownValues,
+  isLoading,
 }) {
   const [globalFilter, setGlobalFilter] = React.useState("");
   const [columnFilters, setColumnFilters] = React.useState([]);
@@ -67,51 +74,47 @@ function Table({
   });
 
   const strippedFuncClass = (index) =>
-    index % 2 !== 0 ? "bg-gray-100 border-b" : "bg-white border-b";
+    index % 2 === 0 ? "bg-gray-100" : "bg-white";
 
-  const dropDownValues = [
-    { value: "", label: "All" },
-    { value: "normal", label: "Normal" },
-    { value: "fire", label: "Fire" },
-    { value: "water", label: "Water" },
-    { value: "grass", label: "Grass" },
-    { value: "electric", label: "Electric" },
-    { value: "ice", label: "Ice" },
-    { value: "fighting", label: "Fighting" },
-    { value: "poison", label: "Poison" },
-    { value: "ground", label: "Ground" },
-    { value: "flying", label: "Flying" },
-    { value: "psychic", label: "Psychic" },
-    { value: "bug", label: "Bug" },
-    { value: "rock", label: "Rock" },
-    { value: "ghost", label: "Ghost" },
-    { value: "dark", label: "Dark" },
-    { value: "dragon", label: "Dragon" },
-    { value: "steel", label: "Steel" },
-    { value: "fairy", label: "Fairy" },
-  ];
-
-  const processedDropDownValues = dropDownValues.map((value) => {
-    return { ...value, Icon: setTypeIcon(value.value) };
-  });
+  const columnType = table.getColumn("types");
 
   return (
-    <div className="p-2">
-      <div>
-        <DropdownColumnFilter
-          dropDownValues={processedDropDownValues}
-          variant="icon"
-          column={table.getColumn("types")}
-          table={table}
+    <div className="p-2 bg-gray-200 flex items-center  flex-col">
+      <div className="mb-6 flex justify-start w-[750px] items-center gap-4">
+        <DebouncedInput
+          value={""}
+          onChange={onDebounceValueChange}
+          className="p-2 font-lg shadow border border-block rounded h-[38px] focus:outline-none font-garamond font-medium placeholder:text-[rgb(128,128,128)]"
+          placeholder="Search all columns..."
+          searchOption={searchOption}
+        />
+
+        <Select {...searchServerSelectProps} />
+
+        <span className="ml-auto font-garamond font-medium text-md">
+          Filter:{" "}
+        </span>
+        <Select
+          onChange={(e) => {
+            return columnType.setFilterValue(e.value);
+          }}
+          width="120px"
+          defaultValue={dropDownValues[0]}
+          selectValue={columnType.getFilterValue()}
+          options={dropDownValues}
         />
       </div>
-      <table className="min-w-[450px] border-2 bg-gray-200 border-b-0">
+      <table className="w-[750px] bg-white">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <th key={header.id} colSpan={header.colSpan}>
+                  <th
+                    className={` h-[30px] bg-white text-left py-5 border-gray-300 tracking-widest uppercase text-xs font-normal border-b ${header.column.columnDef.thClassName}`}
+                    key={header.id}
+                    colSpan={header.colSpan}
+                  >
                     {header.isPlaceholder ? null : (
                       <div
                         {...{
@@ -146,9 +149,7 @@ function Table({
               {row.getVisibleCells().map((cell, index) => (
                 <td
                   key={cell.id}
-                  className={
-                    index !== 2 ? `capitalize text-left px-[10px]` : `text-left`
-                  }
+                  className={`${cell.column.columnDef.tdClassName} capitalize border-gray-300 border-b  font-garamond text-sm font-medium`}
                 >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
@@ -156,82 +157,22 @@ function Table({
             </tr>
           ))}
         </tbody>
-        <tfoot>
-          {table.getFooterGroups().map((footerGroup) => (
-            <tr key={footerGroup.id}>
-              {footerGroup.headers.map((header) => (
-                <th key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.footer,
-                        header.getContext()
-                      )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </tfoot>
       </table>
 
       {table.getPrePaginationRowModel().rows.length === 0 &&
-        columnFilters.length === 0 && <p>No pokemon matched your search!</p>}
-      {table.getPrePaginationRowModel().rows.length === 0 &&
-        columnFilters.length > 0 && (
-          <p>No pokemon matched your filter in this page!</p>
-        )}
+        columnFilters.length === 0 &&
+        !isLoading && <p>No pokemon matched your search!</p>}
+      {
+        table.getPrePaginationRowModel().rows.length === 0 &&
+        columnFilters.length > 0 &&
+        !isLoading &&
+      <p>No pokemon matched your filter in this page!</p>}
 
       {pageMaxCount > 1 && (
-        <>
-          <div className="h-4" />
-          <span className="flex items-center gap-1">
-            <div>Page</div>
-            <strong>
-              {table.getState().pagination.pageIndex + 1} of{" "}
-              {table.getPageCount()}
-            </strong>
-          </span>
-          <button
-            className="border rounded p-1"
-            onClick={() => table.setPageIndex(0)}
-            disabled={!table.getCanPreviousPage()}
-          >
-            {"<<"}
-          </button>
-          <button
-            className="border rounded p-1"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            {"<"}
-          </button>
-          <button
-            className="border rounded p-1"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            {">"}
-          </button>
-          <button
-            className="border rounded p-1"
-            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-            disabled={!table.getCanNextPage()}
-          >
-            {">>"}
-          </button>
-          <select
-            value={table.getState().pagination.pageSize}
-            onChange={(e) => {
-              table.setPageSize(Number(e.target.value));
-            }}
-          >
-            {pageSizeTableValues.map((pageSize) => (
-              <option key={pageSize} value={pageSize}>
-                Show {pageSize}
-              </option>
-            ))}
-          </select>
-        </>
+        <PaginationController
+          table={table}
+          pageSizeTableValues={pageSizeTableValues}
+        />
       )}
     </div>
   );

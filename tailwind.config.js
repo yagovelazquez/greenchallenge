@@ -2,7 +2,17 @@
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
+    fontFamily: {
+      'sans': ['"Open Sans", ui-sans-serif', 'system-ui'],
+      'serif': ['ui-serif', 'Georgia'],
+      'mono': ['ui-monospace', 'SFMono-Regular'],
+      'display': ['Oswald'],
+      'body': ['"Open Sans"'],
+    },
     extend: {
+      fontFamily: {
+      "garamond": ['"Cormorant Garamond"', 'sans-serif']
+      },
       colors: {
         fighting: {
           dark: "#c44d61",

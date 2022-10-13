@@ -18,6 +18,8 @@ import useDataEnabled from "./../hooks/useDataEnabled";
 import DebouncedInput from "../commom/DebouncedInput";
 import { getPokemonColumns } from "../lib/tableColumns";
 import usePrefetch from "./../hooks/usePrefetch";
+import LoadingSpinner from "../commom/LoadingSpinner";
+import Modal from "./../commom/Modal";
 
 function PokemonHome() {
   const pokemonsCtx = useContext(PokemonsContext);
@@ -29,7 +31,7 @@ function PokemonHome() {
   const [searchOption, setSearchOption] = React.useState("");
 
   const searchOptionsHandler = (e) => {
-    setSearchOption(e.target.value);
+    setSearchOption(e.value);
   };
 
   const previousValues = useRef({ searchOption, debouncedInputValue });
@@ -157,13 +159,46 @@ function PokemonHome() {
   );
 
   const pageSizeTableValues = React.useMemo(
-    () => [5,10,15,20,30],
+    () => [
+      { value: 5, label: "Show 5" },
+      { value: 10, label: "Show 10" },
+      { value: 15, label: "Show 15" },
+      { value: 20, label: "Show 20" },
+      { value: 30, label: "Show 30" },
+    ],
     []
   );
 
   const columns = React.useMemo(() => getPokemonColumns(), []);
   const pageCount = Math.ceil(enabled?.data?.count / pageSize);
-  const pageMaxCount = Math.ceil(enabled?.data?.count / pageSizeTableValues[0]);
+  const pageMaxCount = Math.ceil(
+    enabled?.data?.count / pageSizeTableValues[0].value
+  );
+
+  const dropDownValues = React.useMemo(
+    () => [
+      { value: "", label: "All" },
+      { value: "normal", label: "Normal" },
+      { value: "fire", label: "Fire" },
+      { value: "water", label: "Water" },
+      { value: "grass", label: "Grass" },
+      { value: "electric", label: "Electric" },
+      { value: "ice", label: "Ice" },
+      { value: "fighting", label: "Fighting" },
+      { value: "poison", label: "Poison" },
+      { value: "ground", label: "Ground" },
+      { value: "flying", label: "Flying" },
+      { value: "psychic", label: "Psychic" },
+      { value: "bug", label: "Bug" },
+      { value: "rock", label: "Rock" },
+      { value: "ghost", label: "Ghost" },
+      { value: "dark", label: "Dark" },
+      { value: "dragon", label: "Dragon" },
+      { value: "steel", label: "Steel" },
+      { value: "fairy", label: "Fairy" },
+    ],
+    []
+  );
 
   usePrefetch({
     pageIndex,
@@ -175,6 +210,7 @@ function PokemonHome() {
   });
 
   const searchOptions = [
+    { label: "Select a search category", value: "" },
     { label: "Type", value: "type" },
     { label: "Ability", value: "ability" },
     { label: "Name", value: "name" },
@@ -185,38 +221,32 @@ function PokemonHome() {
     []
   );
 
-
+  const searchServerSelectProps = {
+    options: searchOptions,
+    onChange: searchOptionsHandler,
+    selectValue: searchOption,
+    placeholder: "Select a search category",
+    width: "207px",
+  };
 
   return (
     <div>
-      <Select
-        options={searchOptions}
-        onChange={searchOptionsHandler}
-        selectValue={searchOption}
-        firstOption="Select a category"
-      />
-      <DebouncedInput
-        value={""}
-        onChange={debounceValueChangeHandler}
-        className="p-2 font-lg shadow border border-block"
-        placeholder="Search all columns..."
+      <Modal isModal={enabled.isLoading}> <LoadingSpinner /></Modal> 
+      <TableComponent
+        data={enabled?.data?.pokemons || []}
+        pageCount={pageCount}
+        isLoading={enabled.isLoading}
+        dropDownValues={dropDownValues}
+        columns={columns}
         searchOption={searchOption}
+        onDebounceValueChange={debounceValueChangeHandler}
+        onSetPagination={setPagination}
+        pagination={pagination}
+        debouncedInputValue={debouncedInputValue}
+        pageSizeTableValues={pageSizeTableValues}
+        pageMaxCount={pageMaxCount}
+        searchServerSelectProps={searchServerSelectProps}
       />
-      {enabled?.isLoading ? (
-        "Loading..."
-      ) : (
-        <TableComponent
-          data={enabled?.data?.pokemons || []}
-          pageCount={pageCount}
-          columns={columns}
-          onSetPagination={setPagination}
-          pagination={pagination}
-          debouncedInputValue={debouncedInputValue}
-          pageSizeTableValues={pageSizeTableValues}
-          pageMaxCount={pageMaxCount}
-        />
-      )}
-      <ReactQueryDevtools />
     </div>
   );
 }

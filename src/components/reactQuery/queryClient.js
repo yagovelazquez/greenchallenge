@@ -9,6 +9,7 @@ export function generateQueryClient() {
         refetchOnMount: false,
         refetchOnWindowFocus: false,
         refetchOnReconnect: false,
+        retry: 1
       },
     },
   });

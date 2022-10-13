@@ -298,3 +298,27 @@ export const needUpdatePageIndex = (
   }
   return false;
 };
+
+export const validationPagination = (type, table) => {
+  const validation = {
+    lastPage:  table.getCanNextPage,
+    previousPage:  table.getCanPreviousPage,
+    nextPage: table.getCanNextPage,
+    firstPage:   table.getCanPreviousPage
+   } 
+
+return validation[type]()
+   
+}
+
+export const getPaginationAction = (action, table) => {
+  const actions = {
+    firstPage: () => table.setPageIndex(0),
+    previousPage: () => table.previousPage(),
+    nextPage: () => table.nextPage(),
+    lastPage: () => table.setPageIndex(table.getPageCount() - 1)
+  };
+
+  return validationPagination(action, table) ? actions[action]() : null
+
+};

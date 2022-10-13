@@ -1,42 +1,50 @@
+import ReactSelect from "react-select";
+
 function Select({
   options,
-  selectClasses,
   onChange,
-  selectValue,
-  firstOption,
-  variant,
+  placeholder,
+  styles,
+  isSearchable,
+  defaultValue,
+  width
 }) {
+  const defaultStyles = {
+    option: (provided, state) => ({
+      ...provided,
+      background: state.isSelected ? "#e5e7eb" : "white",
+      "&:hover": {
+        background: "#e5e7eb",
+        cursor: "pointer",
+      },
+      color: state.isSelected ? "gray" : "gray",
+    }),
+    control: (provided) => ({
+      ...provided,
+      boxShadow: "none",
+      borderColor: "rgb(229, 231, 235)",
+      "&:hover": {
+        borderColor: "#e5e7eb",
+        color: "gray",
+      },
+    }),
+    container: (provided) => ({
+      ...provided,
+      width: width,
+    }),
+  };
+
   return (
     <div className="flex justify-center">
-      <div className="mb-3 xl:w-96">
-        <select
-          onChange={onChange}
-          value={selectValue}
-          className={`form-select appearance-none
-      block
-      w-full
-      px-3
-      py-1.5
-      text-base
-      font-normal
-      text-gray-700
-      bg-white bg-clip-padding bg-no-repeat
-      border border-solid border-gray-300
-      rounded
-      transition
-      ease-in-out
-      m-0
-      focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none ${selectClasses}`}
-          aria-label="Default select example"
-        >
-          {firstOption && <option value="">{firstOption}</option>}
-          {options.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </div>
+      <ReactSelect
+        placeholder={placeholder}
+        defaultValue={defaultValue}
+        styles={styles || defaultStyles}
+        className={`font-garamond font-medium `}
+        onChange={onChange}
+        options={options}
+        isSearchable={isSearchable ? isSearchable : true}
+      ></ReactSelect>
     </div>
   );
 }
