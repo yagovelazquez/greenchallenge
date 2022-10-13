@@ -6,16 +6,19 @@ export const getPokemonColumns = () => ([
       accessorKey: "image",
       header: "",
       cell: (info) => info.getValue(),
+      thClassName: "w-[80px]",
       enableSorting: false,
     },
     {
       accessorKey: "name",
       header: "Name",
       cell: (info) => info.getValue(),
+      thClassName: "pr-16",
     },
     {
       accessorKey: "abilitiesComponent",
       header: "Abilities",
+      thClassName: "w-[80px] pr-6",
       cell: (info) => info.getValue(),
       enableSorting: false,
     },
@@ -24,7 +27,7 @@ export const getPokemonColumns = () => ([
       header: "Type",
       cell: (info) => info.getValue(),
       enableSorting: false,
-      thClassName: "pl-3"
+      thClassName: "pl-3 pr-14   w-[80px]"
     },
     {
       accessorKey: "types",
@@ -39,11 +42,13 @@ export const getPokemonColumns = () => ([
         {
           accessorKey: "height",
           header: "Ht",
+          thClassName: "w-[37.4px] px-1",
           cell: (info) => info.getValue(),
           enableSorting: false,
         },
         {
           accessorKey: "hp",
+          thClassName: "w-[37.4px] px-1",
           header: "Hp",
           cell: (info) => info.getValue(),
           enableSorting: false,
@@ -51,30 +56,35 @@ export const getPokemonColumns = () => ([
         {
           accessorKey: "attack",
           header: "Atk",
-          cell: (info) => info.getValue(),
-          enableSorting: false,
-        },
-        {
-          accessorKey: "defense",
-          header: "Def",
+          thClassName: "w-[37.4px] px-1",
           cell: (info) => info.getValue(),
           enableSorting: false,
         },
         {
           accessorKey: "special-attack",
           header: "S.Atk",
+          thClassName: "w-[37.4px] px",
+          cell: (info) => info.getValue(),
+          enableSorting: false,
+        },
+        {
+          accessorKey: "defense",
+          header: "Def",
+          thClassName: "w-[37.4px] px-1",
           cell: (info) => info.getValue(),
           enableSorting: false,
         },
         {
           accessorKey: "special-defense",
           header: "S.Def",
+          thClassName: "w-[37.4px] px",
           cell: (info) => info.getValue(),
           enableSorting: false,
         },
         {
           accessorKey: "speed",
           header: "Spd",
+          thClassName: "w-[37.4px] px-1",
           cell: (info) => info.getValue(),
           enableSorting: false,
         },

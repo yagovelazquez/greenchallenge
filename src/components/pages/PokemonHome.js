@@ -20,12 +20,23 @@ import { getPokemonColumns } from "../lib/tableColumns";
 import usePrefetch from "./../hooks/usePrefetch";
 import LoadingSpinner from "../commom/LoadingSpinner";
 import Modal from "./../commom/Modal";
+import LoadingSpinnerModal from "./../commom/LoadingSpinnerModal";
 
 function PokemonHome() {
+  const pageSizeTableValues = React.useMemo(
+    () => [
+      { value: 5, label: "Show 5" },
+      { value: 10, label: "Show 10" },
+      { value: 15, label: "Show 15" },
+      { value: 20, label: "Show 20" },
+      { value: 30, label: "Show 30" },
+    ],
+    []
+  );
   const pokemonsCtx = useContext(PokemonsContext);
   const [{ pageIndex, pageSize }, setPagination] = React.useState({
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: pageSizeTableValues[1].value,
   });
   const [debouncedInputValue, setDebouncedInputValue] = React.useState("");
   const [searchOption, setSearchOption] = React.useState("");
@@ -158,14 +169,11 @@ function PokemonHome() {
     [pageIndex, pageSize]
   );
 
-  const pageSizeTableValues = React.useMemo(
-    () => [
-      { value: 5, label: "Show 5" },
-      { value: 10, label: "Show 10" },
-      { value: 15, label: "Show 15" },
-      { value: 20, label: "Show 20" },
-      { value: 30, label: "Show 30" },
-    ],
+  const messages = React.useMemo(
+    () => ({
+      search: "No pokemon matched your search!",
+      filter: "No pokemon matched your filter in this page!",
+    }),
     []
   );
 
@@ -231,12 +239,13 @@ function PokemonHome() {
 
   return (
     <div>
-      <Modal isModal={enabled.isLoading}> <LoadingSpinner /></Modal> 
+      <LoadingSpinnerModal enabled={enabled}/>
       <TableComponent
         data={enabled?.data?.pokemons || []}
         pageCount={pageCount}
         isLoading={enabled.isLoading}
         dropDownValues={dropDownValues}
+        messages={messages}
         columns={columns}
         searchOption={searchOption}
         onDebounceValueChange={debounceValueChangeHandler}

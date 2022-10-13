@@ -7,7 +7,8 @@ function Select({
   styles,
   isSearchable,
   defaultValue,
-  width
+  width,
+  value
 }) {
   const defaultStyles = {
     option: (provided, state) => ({
@@ -38,6 +39,7 @@ function Select({
     <div className="flex justify-center">
       <ReactSelect
         placeholder={placeholder}
+        value={value}
         defaultValue={defaultValue}
         styles={styles || defaultStyles}
         className={`font-garamond font-medium `}
