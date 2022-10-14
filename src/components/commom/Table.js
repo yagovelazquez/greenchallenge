@@ -160,7 +160,15 @@ function Table({
                           cell.getContext()
                         )
                       ) : (
-                        <div className="hover:cursor-pointer underline-offset-4" onClick={() => modalCtx.onModal({isModal: true, data: cell.getContext().row.original})}>
+                        <div
+                          className="hover:cursor-pointer underline-offset-4"
+                          onClick={() =>
+                            modalCtx.onModal({
+                              isModal: true,
+                              data: cell.getContext().row.original,
+                            })
+                          }
+                        >
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()

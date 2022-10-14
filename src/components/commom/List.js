@@ -3,7 +3,7 @@ import { setTypeIcon } from "../lib/setTypeIcon";
 function List({ listItems, variant, styles }) {
   let processedItems;
   if (variant === "typeIcon") {
-      processedItems = listItems?.map((typeData) => {
+    processedItems = listItems?.map((typeData) => {
       const typeName = typeData.type.name;
       const TypeIcon = setTypeIcon(typeName);
       return { typeName, TypeIcon };
@@ -11,14 +11,11 @@ function List({ listItems, variant, styles }) {
   }
 
   if (variant === "abilitiesList") {
-      processedItems = listItems?.map((abilityData) => {
+    processedItems = listItems?.map((abilityData) => {
       const abilityName = abilityData.ability.name;
-      return  abilityName;
+      return abilityName;
     });
-
   }
-
- 
 
   return (
     <ul className="list-none">
@@ -31,7 +28,12 @@ function List({ listItems, variant, styles }) {
             </span>
           </li>
         ))}
-      {variant === "abilitiesList" && processedItems.map((ability) => <li className={styles ? styles : "capitalize"} key={ability}>{ability}</li>)}
+      {variant === "abilitiesList" &&
+        processedItems.map((ability) => (
+          <li className={styles ? styles : "capitalize"} key={ability}>
+            {ability}
+          </li>
+        ))}
     </ul>
   );
 }

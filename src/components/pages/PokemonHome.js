@@ -18,6 +18,7 @@ import usePrefetch from "./../hooks/usePrefetch";
 import LoadingSpinnerModal from "./../commom/LoadingSpinnerModal";
 
 function PokemonHome() {
+  console.count();
   const pageSizeTableValues = React.useMemo(
     () => [
       { value: 5, label: "Show 5" },
@@ -235,7 +236,6 @@ function PokemonHome() {
 
   return (
     <div className="bg-gray-200 min-h-screen">
-
       <LoadingSpinnerModal enabled={enabled} />
 
       <TableComponent

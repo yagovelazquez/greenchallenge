@@ -7,14 +7,7 @@ import {
 } from "recharts";
 
 const PieChart = ({ data, COLORS }) => {
-
-
-  const filterData = data.filter(item => item.value !== 0)
-
-  console.log(filterData)
-
-  
-
+  const filterData = data.filter((item) => item.value !== 0);
 
   const RADIAN = Math.PI / 180;
   const renderCustomizedLabel = ({

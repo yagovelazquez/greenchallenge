@@ -10,7 +10,7 @@ const PokemonsContext = React.createContext({
   setFilterType: () => {},
   addPokemons: () => {},
   addPokemonsFromAbility: () => {},
-  checkOnePokemonExists: () => {}
+  checkOnePokemonExists: () => {},
 });
 
 export default PokemonsContext;

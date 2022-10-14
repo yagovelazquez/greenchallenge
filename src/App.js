@@ -5,16 +5,11 @@ import PopUpModal from "./components/commom/PopUpModal";
 import CardPokemonInfo from "./components/commom/CardPokemonInfo";
 
 function App() {
-
   return (
     <PokemonTypesProvider>
       <ModalProvider>
-      <PopUpModal
-        bodyComponent={
-          <CardPokemonInfo />
-        }
-      ></PopUpModal>
-      <PokemonHome />
+        <PopUpModal bodyComponent={<CardPokemonInfo />}></PopUpModal>
+        <PokemonHome />
       </ModalProvider>
     </PokemonTypesProvider>
   );

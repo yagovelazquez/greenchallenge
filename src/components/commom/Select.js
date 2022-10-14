@@ -9,7 +9,7 @@ function Select({
   defaultValue,
   width,
   divStyles,
-  value
+  value,
 }) {
   const defaultStyles = {
     option: (provided, state) => ({

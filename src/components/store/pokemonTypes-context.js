@@ -1,5 +1,5 @@
 import PokemonsContext from "./pokemonsProvider";
-import {  useState } from "react";
+import { useState } from "react";
 
 const defaultPokemonTypeState = {};
 

@@ -11,7 +11,7 @@ module.exports = {
     },
     extend: {
       screens: {
-        tablet: "500px"
+        tablet: "500px",
       },
       fontFamily: {
         garamond: ['"Cormorant Garamond"', "sans-serif"],

@@ -9,9 +9,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-function AreaChart({data}) {
-
-
+function AreaChart({ data }) {
   return (
     <ResponsiveContainer width="100%" height="100%">
       <AreaChart

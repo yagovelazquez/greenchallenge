@@ -6,7 +6,7 @@ import RadarChart from "./RadarChart";
 import PieChart from "./PieChart";
 import ModalContext from "../store/modalProvider";
 import { useContext } from "react";
-import TableMessage from './TableMessage';
+import TableMessage from "./TableMessage";
 
 const SubtitleChart = () => {
   return (
@@ -38,10 +38,16 @@ function CardPokemonInfo() {
     </div>
   );
 
-  const PokemonWithoutSex = ({female}) => {
-    const message = "This pokemon doesn't have a defined sex."
-    return <TableMessage type="pokemonWithoutSex" female={female} message={message} />
-  }
+  const PokemonWithoutSex = ({ female }) => {
+    const message = "This pokemon doesn't have a defined sex.";
+    return (
+      <TableMessage
+        type="pokemonWithoutSex"
+        female={female}
+        message={message}
+      />
+    );
+  };
 
   const GraficComponent = ({
     graphcomponent,
@@ -77,7 +83,6 @@ function CardPokemonInfo() {
     { Points: capture_rate, name: "Capture Rate" },
   ];
 
-
   const radarData = [
     { Points: specialAttack, name: "Special Attack", fullMark: 150 },
     { Points: attack, name: "Attack", fullMark: 150 },
@@ -93,7 +98,6 @@ function CardPokemonInfo() {
     { value: female, name: "Female" },
     { value: male, name: "Male" },
   ];
-
 
   return (
     <div className="flex flex-col justify-start   p-4 italic font-garamond">
@@ -130,10 +134,13 @@ function CardPokemonInfo() {
       <GraficComponent
         label="Gender Ratio"
         stylesLabel="!my-1"
-        subtitleComponent={female < 0 ? null :  <SubtitleChart />}
+        subtitleComponent={female < 0 ? null : <SubtitleChart />}
         graphcomponent={
-          female < 0 ? <PokemonWithoutSex female={female}/> : 
-          <PieChart COLORS={["#FFC0CB", "#87CEFA"]} data={PierData} />
+          female < 0 ? (
+            <PokemonWithoutSex female={female} />
+          ) : (
+            <PieChart COLORS={["#FFC0CB", "#87CEFA"]} data={PierData} />
+          )
         }
       />
     </div>

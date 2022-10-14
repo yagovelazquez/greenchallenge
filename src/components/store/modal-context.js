@@ -1,19 +1,16 @@
-import {  useState } from "react";
+import { useState } from "react";
 import ModalContext from "./modalProvider";
 
-
 function ModalProvider(props) {
-  const [modalState, setModal] = useState(
-    {isModal: false}
-  );
+  const [modalState, setModal] = useState({ isModal: false });
 
   const modalStateHandler = (e) => {
-    setModal(e)
-  }
+    setModal(e);
+  };
 
   const modalContext = {
     modalState,
-    onModal: modalStateHandler
+    onModal: modalStateHandler,
   };
 
   return (

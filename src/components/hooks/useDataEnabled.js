@@ -9,7 +9,11 @@ function useDataEnabled(
   loading
 ) {
   if (isPokemonQueryEnabled(debouncedInputValue, actualCategoryValue)) {
-    return { data: data.normalData, isLoading: loading.isLoadingDataPokemon,   queryEnabled: "normal", };
+    return {
+      data: data.normalData,
+      isLoading: loading.isLoadingDataPokemon,
+      queryEnabled: "normal",
+    };
   }
   if (
     isPokemonSearchEnabled(actualCategoryValue, "name", debouncedInputValue)
