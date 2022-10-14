@@ -125,7 +125,8 @@ export const fetchSearchPokemon = async (
         };
 
       const data = await searchPokemons(searchCategory, lowerCaseSearchValue);
-      const processedPokemonData = processPokemonData(data);
+      const pokemonSpeciesInfo = await getPokemonInfoSpecies(data.species.url)
+      const processedPokemonData = processPokemonData(data,pokemonSpeciesInfo);
       pokemonsCtx.addPokemons([processedPokemonData]);
 
       return { pokemons: [processedPokemonData], count: 1 };

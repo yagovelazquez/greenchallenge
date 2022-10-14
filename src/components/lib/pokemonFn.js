@@ -83,13 +83,14 @@ export const processPokemonData = ({
   held_items,
   sprites,
   stats,
-}, {
-  base_happiness,
-  gender_rate,
-  capture_rate,
-  egg_groups,
-  habitat
-}) => {
+}, speciesData) => {
+  const  {
+    base_happiness,
+    gender_rate,
+    capture_rate,
+    egg_groups,
+    habitat
+  } = speciesData || undefined
   const typeComponent = <List listItems={types} variant="typeIcon" />;
   const processedTypes = types.map((typeData) => typeData.type.name).join(", ");
   const abilitiesComponent = (

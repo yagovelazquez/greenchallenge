@@ -8,6 +8,11 @@ import {
 
 const PieChart = ({ data, COLORS }) => {
 
+
+  const filterData = data.filter(item => item.value !== 0)
+
+  console.log(filterData)
+
   
 
 
@@ -42,7 +47,7 @@ const PieChart = ({ data, COLORS }) => {
     <ResponsiveContainer width="100%" height="100%">
       <RechartPieChart width={400} height={400}>
         <Pie
-          data={data}
+          data={filterData}
           cx="50%"
           cy="50%"
           labelLine={false}

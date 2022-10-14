@@ -94,6 +94,7 @@ function CardPokemonInfo() {
     { value: male, name: "Male" },
   ];
 
+
   return (
     <div className="flex flex-col justify-start   p-4 italic font-garamond">
       <div className="flex relative w-full items-center">
