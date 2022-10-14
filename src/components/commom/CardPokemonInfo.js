@@ -100,9 +100,9 @@ function CardPokemonInfo() {
   ];
 
   return (
-    <div className=" flex flex-col justify-start p-4 italic font-garamond">
+    <div className=" overflow-y-auto h-full flex flex-col justify-start p-4 italic font-garamond">
       <div className="flex relative w-full items-center">
-        <Image className="h-[150px] w-[150px]" url={url} alt={data.name} />
+        <Image className="h-[150px] w-[150px]" containerClassName="min-h-[150px] min-w-[150px]" url={url} alt={data.name} />
         <IoMdClose
           onClick={() => modalCtx.onModal(false)}
           className="absolute cursor-pointer h-6 w-6  top-2 right-2"

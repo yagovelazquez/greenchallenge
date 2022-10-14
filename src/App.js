@@ -8,7 +8,7 @@ function App() {
   return (
     <PokemonTypesProvider>
       <ModalProvider>
-        <PopUpModal bodyComponent={<CardPokemonInfo />}></PopUpModal>
+        <PopUpModal ><CardPokemonInfo /></PopUpModal>
         <PokemonHome />
       </ModalProvider>
     </PokemonTypesProvider>

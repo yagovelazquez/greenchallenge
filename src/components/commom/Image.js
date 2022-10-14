@@ -1,6 +1,8 @@
 function Image(props) {
-  const { url, alt, className } = props;
-  return <img className={className} src={url} alt={alt} />;
+  const { url, alt, className, containerClassName } = props;
+  return <div className={containerClassName}>
+    <img className={className} src={url} alt={alt} />
+    </div>;
 }
 
 export default Image;

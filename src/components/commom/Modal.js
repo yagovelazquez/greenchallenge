@@ -1,20 +1,26 @@
-function Modal(props) {
-  const { isModal, className } = props;
+import ReactDOM from "react-dom";
 
-  return (
+function Modal(props) {
+  const { isModal, variation } = props;
+
+  const classVariation = {
+   middleCentered: "flex items-center",
+  }
+
+  if (!isModal) return;
+
+  return ReactDOM.createPortal(
     <>
-      {isModal && (
-        <div
-          className={
-            className
-              ? className
-              : "bg-black animate-fadeIn  bg-opacity-30 backdrop-blur-sm overflow-x-hidden fixed top-0 right-0 flex items-bottom justify-center !h-screen left-0 z-50 w-screen md:inset-0   md:h-full"
-          }
-        >
-          {props.children}
-        </div>
-      )}
-    </>
+      <div
+        className={
+          "bg-black animate-fadeIn  bg-opacity-30 backdrop-blur-sm  fixed top-0 left-0 bottom-0 right-0 z-1"
+        }
+      ></div>
+      <div className={`z-2 p-5 h-full top-0 animate-fadeIn fixed left-1/2 translate-x-[-50%]  ${classVariation[variation]}`}>
+        {props.children}
+      </div>
+    </>,
+    document.getElementById("modal")
   );
 }
 

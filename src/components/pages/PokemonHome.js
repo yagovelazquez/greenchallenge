@@ -235,7 +235,7 @@ function PokemonHome() {
   };
 
   return (
-    <div className="bg-gray-200 min-h-screen">
+    <div className="bg-gray-200 min-h-screen pb-40">
       <LoadingSpinnerModal enabled={enabled} />
 
       <TableComponent
