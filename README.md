@@ -1,70 +1,51 @@
-# Getting Started with Create React App
+# See the project live at
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+https://greenchallenge.yagovelazquez.com/
 
-## Available Scripts
 
-In the project directory, you can run:
+## Getting Started:
 
-### `npm start`
+After fetching the code run: <br>
+npm install <br>
+npm start
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+You should be able to see the results on http://localhost:3000
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Libs Used:
 
-### `npm test`
+This project was made using the following libs: <br>
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+<ul> 
+  <li>React Query to fetch server data</li>
+  <li>React Table to manage table state</li>
+  <li>Tailwind to style the components</li>
+  <li>React Select</li>
+  <li>Context API</li>
+  <li>React Icons</li>
+</ul>
 
-### `npm run build`
+# Keypoints of the project:
+## Data Storage:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+The data is storaged on cache of react query and context, basically everytime it is needed to fetch a pokemon the application check if this pokemon already exists on context and fetch if doesn't or those ones that doesn't. 
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Prefetch:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+The application counts with prefetching of the next or previous page (it passes through a check up to see which page has to be fetched).
 
-### `npm run eject`
+## Filter and search: 
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Since searching for a pokemons type will give the user all data needed, the dropdown was made to filter the data displayed on the current page of the table ( only front end ). When searching for a pokemon on the backend, I decided to do my own pagination so it doesn't need to fetch all the data at once (100+ pokemons), which means it will only fetch the current page data and prefetch the next.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+# What's next?:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Although it's working the code, it's still needed to go through refactoring in order to make more components reusable and test the aplication. It has many functions that are being used at many places, so it's crucial to create UNIT and INTEGRATION tests.
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-### Analyzing the Bundle Size
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
