@@ -10,6 +10,15 @@ module.exports = {
       body: ['"Open Sans"'],
     },
     extend: {
+      animation: {
+        fadeIn: "fade 0.4s ease-in forwards",
+         },
+      keyframes: {
+        fade: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+      },
       screens: {
         tablet: "500px",
       },

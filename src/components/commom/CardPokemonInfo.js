@@ -22,9 +22,9 @@ function CardPokemonInfo() {
   const modalCtx = useContext(ModalContext);
   const data = modalCtx.modalState.data;
 
-  if (data.length === 0) return;
+  if (data?.length === 0) return;
 
-  const url = getPokemonArtWork(data.sprites);
+  const url = getPokemonArtWork(data?.sprites);
 
   const ListItems = ({ styles, value, attribute, unity }) => (
     <div className={styles ? styles : "flex flex-col w-1/3 items-center"}>
@@ -100,7 +100,7 @@ function CardPokemonInfo() {
   ];
 
   return (
-    <div className="flex flex-col justify-start   p-4 italic font-garamond">
+    <div className=" flex flex-col justify-start p-4 italic font-garamond">
       <div className="flex relative w-full items-center">
         <Image className="h-[150px] w-[150px]" url={url} alt={data.name} />
         <IoMdClose

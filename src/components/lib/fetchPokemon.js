@@ -40,7 +40,6 @@ export const getPokemonInfo = async (url) => {
   return data;
 };
 
-
 export const getPokemonInfoSpecies = async (url) => {
   const response = await fetch(url, {
     method: "GET",
@@ -60,8 +59,13 @@ export const getPokemonInfoSpecies = async (url) => {
 export const fetchPokemonDetails = (data) => {
   return data.map(async (pokemon) => {
     const pokemonInfo = await getPokemonInfo(pokemon.url);
-    const pokemonSpeciesInfo = await getPokemonInfoSpecies(pokemonInfo.species.url)
-    const processedPokemonData = processPokemonData(pokemonInfo, pokemonSpeciesInfo);
+    const pokemonSpeciesInfo = await getPokemonInfoSpecies(
+      pokemonInfo.species.url
+    );
+    const processedPokemonData = processPokemonData(
+      pokemonInfo,
+      pokemonSpeciesInfo
+    );
     return processedPokemonData;
   });
 };
@@ -125,8 +129,8 @@ export const fetchSearchPokemon = async (
         };
 
       const data = await searchPokemons(searchCategory, lowerCaseSearchValue);
-      const pokemonSpeciesInfo = await getPokemonInfoSpecies(data.species.url)
-      const processedPokemonData = processPokemonData(data,pokemonSpeciesInfo);
+      const pokemonSpeciesInfo = await getPokemonInfoSpecies(data.species.url);
+      const processedPokemonData = processPokemonData(data, pokemonSpeciesInfo);
       pokemonsCtx.addPokemons([processedPokemonData]);
 
       return { pokemons: [processedPokemonData], count: 1 };

@@ -4,7 +4,7 @@ import ModalContext from "./modalProvider";
 function ModalProvider(props) {
   const [modalState, setModal] = useState({ isModal: false });
 
-  const modalStateHandler = (e) => {
+  const modalStateHandler = (e) => {  
     setModal(e);
   };
 
