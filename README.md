@@ -40,7 +40,7 @@ Since searching for a pokemons type will give the user all data needed, the drop
 
 # What's next?:
 
-Although it's working the code, it's still needed to go through refactoration in order to make more components reusable and test the aplication. It has many functions that are being used at many places, so it's crucial to create UNIT and INTEGRATION tests.
+Although it's working the code, it's still needed to go through refactoring in order to make more components reusable and test the aplication. It has many functions that are being used at many places, so it's crucial to create UNIT and INTEGRATION tests.
 
 
 
